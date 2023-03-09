@@ -12,21 +12,38 @@ export class MyParallelogram extends CGFobject {
     
     initBuffers() {
         this.vertices = [
-            1, 1, 0,    // A
-            0, 0, 0,    // B
-            2, 0, 0,    // C
-            3, 1, 0,    // D
+            1, 1, 0,    // A1
+            0, 0, 0,    // B1
+            2, 0, 0,    // C1
+            3, 1, 0,    // D1
+            1, 1, 0,    // A2
+            0, 0, 0,    // B2
+            2, 0, 0,    // C2
+            3, 1, 0,    // D2
         ];
 
         //Counter-clockwise reference of vertices
         this.indices = [
-            0, 1, 2,    // A B C
-            0, 2, 3,    // A C D
-            2, 1, 0,    // C B A
-            3, 2, 0,    // D C A
+            0, 1, 2,    //1 A B C
+            0, 2, 3,    //1 A C D
+            2, 1, 0,    //1 C B A
+            3, 2, 0,    //1 D C A
+            0, 1, 2,    //2 A B C
+            0, 2, 3,    //2 A C D
+            2, 1, 0,    //2 C B A
+            3, 2, 0,    //2 D C A
         ];
 
-        this.normals = [];
+        this.normals = [
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, -1,
+            0, 0, -1,
+            0, 0, -1,
+            0, 0, -1,
+        ];
 
         //The defined indices (and corresponding vertices)
         //will be read in groups of three to draw triangles
@@ -34,18 +51,5 @@ export class MyParallelogram extends CGFobject {
 
         this.initGLBuffers();
     }
-
-        /**
-     * Called when user interacts with GUI to change object's complexity.
-     * @param {integer} complexity - changes number of nDivs
-     */
-        updateBuffers(complexity) {
-            this.nDivs = 1 + Math.round(9 * complexity); //complexity varies 0-1, so nDivs varies 1-10
-            this.patchLength = 1.0 / this.nDivs;
-    
-            // reinitialize buffers
-            this.initBuffers();
-            this.initNormalVizBuffers();
-        }
 }
 

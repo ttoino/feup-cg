@@ -22,7 +22,11 @@ export class MyTriangle extends CGFobject {
             0, 1, 2,    // A B C
         ];
         
-        this.normals = [];
+        this.normals = [
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1,
+        ];
 
         //The defined indices (and corresponding vertices)
         //will be read in groups of three to draw triangles
@@ -30,18 +34,5 @@ export class MyTriangle extends CGFobject {
 
         this.initGLBuffers();
     }
-
-        /**
-     * Called when user interacts with GUI to change object's complexity.
-     * @param {integer} complexity - changes number of nDivs
-     */
-        updateBuffers(complexity) {
-            this.nDivs = 1 + Math.round(9 * complexity); //complexity varies 0-1, so nDivs varies 1-10
-            this.patchLength = 1.0 / this.nDivs;
-    
-            // reinitialize buffers
-            this.initBuffers();
-            this.initNormalVizBuffers();
-        }
 }
 

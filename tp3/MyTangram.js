@@ -14,6 +14,8 @@ export class MyTangram extends CGFobject {
     constructor(scene) {
         super(scene);
 
+        this.normals = [];
+
         //Initialize objects
         this.diamond = new MyDiamond(scene);
         this.triangle = new MyTriangle(scene);
@@ -73,12 +75,23 @@ export class MyTangram extends CGFobject {
      * Called when user interacts with GUI to change object's complexity.
      * @param {integer} complexity - changes number of nDivs
      */
-    updateBuffers(complexity) {
-        this.diamond.updateBuffers(complexity);
-        this.parallelogram.updateBuffers(complexity);
-        this.triangle.updateBuffers(complexity);
-        this.triangleBig.updateBuffers(complexity);
-        this.triangleSmall.updateBuffers(complexity);
+    updateBuffers(complexity) {}
+
+    enableNormalViz() {
+        this.diamond.enableNormalViz();
+        this.parallelogram.enableNormalViz();
+        this.triangle.enableNormalViz();
+        this.triangleBig.enableNormalViz();
+        this.triangleSmall.enableNormalViz();
     }
+
+    disableNormalViz() {
+        this.diamond.disableNormalViz();
+        this.parallelogram.disableNormalViz();
+        this.triangle.disableNormalViz();
+        this.triangleBig.disableNormalViz();
+        this.triangleSmall.disableNormalViz();
+    }
+
 }
 
