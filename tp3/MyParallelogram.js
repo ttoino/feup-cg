@@ -16,6 +16,7 @@ export class MyParallelogram extends CGFobject {
             0, 0, 0,    // B1
             2, 0, 0,    // C1
             3, 1, 0,    // D1
+
             1, 1, 0,    // A2
             0, 0, 0,    // B2
             2, 0, 0,    // C2
@@ -26,12 +27,9 @@ export class MyParallelogram extends CGFobject {
         this.indices = [
             0, 1, 2,    //1 A B C
             0, 2, 3,    //1 A C D
-            2, 1, 0,    //1 C B A
-            3, 2, 0,    //1 D C A
-            0, 1, 2,    //2 A B C
-            0, 2, 3,    //2 A C D
-            2, 1, 0,    //2 C B A
-            3, 2, 0,    //2 D C A
+
+            6, 5, 4,    //2 C B A
+            7, 6, 4,    //2 D C A
         ];
 
         this.normals = [
