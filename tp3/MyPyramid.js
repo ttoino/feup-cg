@@ -1,4 +1,5 @@
 import { CGFobject } from "../lib/CGF.js";
+
 /**
  * MyPyramid
  * @constructor
