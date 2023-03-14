@@ -1,4 +1,4 @@
-import { CGFobject } from '../lib/CGF.js';
+import { CGFobject, CGFappearance, CGFtexture } from '../lib/CGF.js';
 import { MyDiamond } from './MyDiamond.js';
 import { MyParallelogram } from './MyParallelogram.js';
 import { MyTriangle } from './MyTriangle.js';
@@ -20,9 +20,19 @@ export class MyTangram extends CGFobject {
         this.parallelogram = new MyParallelogram(scene);
         this.triangleSmall = new MyTriangleSmall(scene);
         this.triangleBig = new MyTriangleBig(scene);
+
+        this.tangramMaterial = new CGFappearance(scene);
+        this.tangramMaterial.setAmbient(0.1, 0.1, 0.1, 1);
+        this.tangramMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.tangramMaterial.setSpecular(0.1, 0.1, 0.1, 1);
+        this.tangramMaterial.setShininess(10.0);
+        this.tangramMaterial.loadTexture('images/tangram.png');
     }
 
     display() {
+
+        this.tangramMaterial.apply();
+
         this.scene.pushMatrix()
         this.scene.multMatrix([
             1,  0,  0,  0,

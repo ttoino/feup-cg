@@ -26,6 +26,14 @@ export class MyParallelogram extends CGFobject {
             3, 2, 0,    // D C A
         ];
 
+        this.texCoords = [
+            0.75, 0.75,
+            1, 1,
+            0.5, 1,
+            0.25, 0.75
+        ];
+        this.updateTexCoordsGLBuffers();
+
         //The defined indices (and corresponding vertices)
         //will be read in groups of three to draw triangles
         this.primitiveType = this.scene.gl.TRIANGLES;
