@@ -49,11 +49,23 @@ export class MyTangram extends CGFobject {
         this.parallelogram.display()
         this.scene.popMatrix()
 
+        this.triangleSmall.texCoords = [
+            0.5, 0.5,
+            0.25, 0.75,
+            0.75, 0.75,
+        ];
+        this.triangleSmall.updateTexCoordsGLBuffers();
         this.scene.pushMatrix()
         this.scene.translate(1, 0, 0);
         this.triangleSmall.display()
         this.scene.popMatrix()
 
+        this.triangleSmall.texCoords = [
+            0.25, 0.25,
+            0, 0,
+            0, 0.5,
+        ];
+        this.triangleSmall.updateTexCoordsGLBuffers();
         this.scene.pushMatrix()
         this.scene.translate(-2, -1, 0);
         this.scene.rotate(-Math.PI/2, 0, 0, 1);
@@ -66,12 +78,24 @@ export class MyTangram extends CGFobject {
         this.triangle.display()
         this.scene.popMatrix()
 
+        this.triangleBig.texCoords = [
+            0.5, 0.5,
+            1, 0,
+            0, 0,
+        ];
+        this.triangleBig.updateTexCoordsGLBuffers();
         this.scene.pushMatrix()
         this.scene.translate(0, -2, 0);
         this.scene.rotate(-Math.PI/2, 0, 0, 1);
         this.triangleBig.display()
         this.scene.popMatrix()
 
+        this.triangleBig.texCoords = [
+            0.5, 0.5,
+            1, 1,
+            1, 0,
+        ];
+        this.triangleBig.updateTexCoordsGLBuffers();
         this.scene.pushMatrix()
         this.scene.translate(0, -2, 0);
         this.scene.rotate(Math.PI/2, 0, 0, 1);
