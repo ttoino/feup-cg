@@ -44,8 +44,7 @@ export class MyTangram extends CGFobject {
         this.scene.popMatrix()
 
         this.scene.pushMatrix()
-        this.scene.rotate(Math.PI, 0, 1, 0);
-        this.scene.rotate(Math.PI/3, 0, 0, 1);
+        this.scene.rotate(Math.PI*2/3, 0, 0, 1);
         this.parallelogram.display()
         this.scene.popMatrix()
 

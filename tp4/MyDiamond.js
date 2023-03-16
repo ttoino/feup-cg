@@ -24,6 +24,13 @@ export class MyDiamond extends CGFobject {
             1, 3, 2     // B D C
         ];
 
+        this.normals = [
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1,
+        ]
+
         this.texCoords = [
             0, 0.5,
             0.25, 0.75,
