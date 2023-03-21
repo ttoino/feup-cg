@@ -1,6 +1,6 @@
-import { CGFapplication } from '../lib/CGF.js';
-import { ShaderScene } from './ShaderScene.js';
-import { MyInterface } from './MyInterface.js';
+import { CGFapplication } from "../lib/CGF.js";
+import { ShaderScene } from "./ShaderScene.js";
+import { MyInterface } from "./MyInterface.js";
 
 function main() {
     var app = new CGFapplication(document.body);
