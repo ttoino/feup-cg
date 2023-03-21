@@ -1,4 +1,4 @@
-import {CGFobject} from '../lib/CGF.js';
+import { CGFobject } from '../lib/CGF.js';
 /**
 * MyPlane
 * @constructor
@@ -59,13 +59,12 @@ export class MyPlane extends CGFobject {
 		this.initGLBuffers();
 	}
 
-	setFillMode() { 
-		this.primitiveType=this.scene.gl.TRIANGLE_STRIP;
+	setFillMode() {
+		this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
 	}
 
-	setLineMode() 
-	{ 
-		this.primitiveType=this.scene.gl.LINES;
+	setLineMode() {
+		this.primitiveType = this.scene.gl.LINES;
 	};
 
 }
