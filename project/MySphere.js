@@ -1,4 +1,4 @@
-import { CGFappearance, CGFobject, CGFtexture } from "../lib/CGF.js";
+import { CGFobject } from "../lib/CGF.js";
 
 /**
  * MySphere
@@ -14,19 +14,15 @@ export class MySphere extends CGFobject {
      * @param {number} slices
      * @param {number} stacks
      */
-    constructor(scene, slices, stacks) {
+    constructor(scene, slices, stacks, inverted = false) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
+        this.inverted = inverted;
         this.initBuffers();
     }
 
     initBuffers() {
-        this.texture = new CGFtexture(this.scene, "images/earth.jpg");
-        this.appearance = new CGFappearance(this.scene);
-        this.appearance.setTexture(this.texture);
-        this.appearance.setTextureWrap("REPEAT", "REPEAT");
-
         this.vertices = [];
         this.indices = [];
         this.normals = [];
@@ -49,28 +45,33 @@ export class MySphere extends CGFobject {
                 this.normals.push(ct * cp, sp, st * cp);
                 this.texCoords.push(
                     1 - slice / (this.slices * 4),
-                    1 - stack / (this.stacks * 2),
+                    1 - stack / (this.stacks * 2)
                 );
 
                 if (slice > 0 && stack > 0) {
-                    this.indices.push(
-                        slice * (this.stacks * 2 + 1) + stack,
-                        (slice - 1) * (this.stacks * 2 + 1) + stack - 1,
-                        (slice - 1) * (this.stacks * 2 + 1) + stack,
-                        slice * (this.stacks * 2 + 1) + stack,
-                        slice * (this.stacks * 2 + 1) + stack - 1,
-                        (slice - 1) * (this.stacks * 2 + 1) + stack - 1
-                    );
+                    if (this.inverted)
+                        this.indices.push(
+                            slice * (this.stacks * 2 + 1) + stack,
+                            (slice - 1) * (this.stacks * 2 + 1) + stack,
+                            (slice - 1) * (this.stacks * 2 + 1) + stack - 1,
+                            slice * (this.stacks * 2 + 1) + stack,
+                            (slice - 1) * (this.stacks * 2 + 1) + stack - 1,
+                            slice * (this.stacks * 2 + 1) + stack - 1
+                        );
+                    else
+                        this.indices.push(
+                            slice * (this.stacks * 2 + 1) + stack,
+                            (slice - 1) * (this.stacks * 2 + 1) + stack - 1,
+                            (slice - 1) * (this.stacks * 2 + 1) + stack,
+                            slice * (this.stacks * 2 + 1) + stack,
+                            slice * (this.stacks * 2 + 1) + stack - 1,
+                            (slice - 1) * (this.stacks * 2 + 1) + stack - 1
+                        );
                 }
             }
         }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
-    }
-
-    display() {
-        this.appearance.apply();
-        super.display();
     }
 }
