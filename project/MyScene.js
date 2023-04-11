@@ -6,6 +6,7 @@ import {
     CGFshader,
     CGFtexture,
 } from "../lib/CGF.js";
+import { MyBird } from "./MyBird.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyPlane } from "./MyPlane.js";
 
@@ -40,6 +41,8 @@ export class MyScene extends CGFscene {
             new CGFtexture(this, "images/panorama4.jpg")
         );
 
+        this.bird = new MyBird(this);
+
         //Objects connected to MyInterface
         this.displayAxis = true;
         this.scaleFactor = 1;
@@ -50,6 +53,21 @@ export class MyScene extends CGFscene {
         this.appearance = new CGFappearance(this);
         this.appearance.setTexture(this.texture);
         this.appearance.setTextureWrap("REPEAT", "REPEAT");
+
+        this.enableNormalViz = false;
+
+        this.setUpdatePeriod(50);
+    }
+
+    checkKeys() {
+
+        console.log("boas");
+
+        if (this.gui.isKeyPressed("KeyW")) {
+            this.camera.moveForward(1);
+        } else if (this.gui.isKeyPressed("KeyS")) {
+            this.camera.moveForward(-1);
+        }
     }
 
     initLights() {
@@ -76,6 +94,13 @@ export class MyScene extends CGFscene {
         this.setShininess(10.0);
     }
 
+    update() {
+
+        this.checkKeys();
+
+        super.update();
+    }
+
     display() {
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
@@ -89,10 +114,14 @@ export class MyScene extends CGFscene {
 
         // Draw axis
         if (this.displayAxis) this.axis.display();
+        if (this.enableNormalViz) {
+            this.bird.enableNormalViz();
+        }
 
         // ---- BEGIN Primitive drawing section
 
         this.panorama.display();
+        this.bird.display();
 
         this.pushMatrix();
         this.appearance.apply();
