@@ -60,9 +60,6 @@ export class MyScene extends CGFscene {
     }
 
     checkKeys() {
-
-        console.log("boas");
-
         if (this.gui.isKeyPressed("KeyW")) {
             this.camera.moveForward(1);
         } else if (this.gui.isKeyPressed("KeyS")) {
@@ -94,8 +91,7 @@ export class MyScene extends CGFscene {
         this.setShininess(10.0);
     }
 
-    update() {
-
+    update(time) {
         this.checkKeys();
 
         super.update();
@@ -116,8 +112,9 @@ export class MyScene extends CGFscene {
         if (this.displayAxis) this.axis.display();
         if (this.enableNormalViz) {
             this.bird.enableNormalViz();
+        } else {
+            this.bird.disableNormalViz();
         }
-
         // ---- BEGIN Primitive drawing section
 
         this.panorama.display();

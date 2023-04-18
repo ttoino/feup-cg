@@ -14,11 +14,12 @@ export class MySphere extends CGFobject {
      * @param {number} slices
      * @param {number} stacks
      */
-    constructor(scene, slices, stacks, inverted = false) {
+    constructor(scene, slices, stacks, inverted = false, textured = true) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
         this.inverted = inverted;
+        this.textured = textured;
         this.initBuffers();
     }
 
@@ -26,7 +27,9 @@ export class MySphere extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-        this.texCoords = [];
+
+        if (this.textured)
+            this.texCoords = [];
 
         const dtheta = (Math.PI * 0.5) / this.slices;
         const dphi = (Math.PI * 0.5) / this.stacks;
@@ -43,10 +46,11 @@ export class MySphere extends CGFobject {
 
                 this.vertices.push(ct * cp, sp, st * cp);
                 this.normals.push(ct * cp, sp, st * cp);
-                this.texCoords.push(
-                    1 - slice / (this.slices * 4),
-                    1 - stack / (this.stacks * 2)
-                );
+                if (this.textured)
+                    this.texCoords.push(
+                        1 - slice / (this.slices * 4),
+                        1 - stack / (this.stacks * 2)
+                    );
 
                 if (slice > 0 && stack > 0) {
                     if (this.inverted)

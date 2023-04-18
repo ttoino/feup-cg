@@ -86,7 +86,6 @@ export class MyWing extends CGFobject {
             ...arm.map(x => x / normalLen),
             ...arm.map(x => -x / normalLen),
             ...arm.map(x => -x / normalLen),
-
         ]
 
         this.primitiveType = this.scene.gl.TRIANGLES;
