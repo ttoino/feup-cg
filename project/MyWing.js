@@ -1,4 +1,4 @@
-import { CGFobject } from "../lib/CGF.js";
+import { CGFobject, CGFappearance } from "../lib/CGF.js";
 
 /**
  * MySphere
@@ -12,9 +12,16 @@ export class MyWing extends CGFobject {
      *
      * @param {CGFscene} scene
      */
-    constructor(scene) {
+    constructor(scene, wingColor) {
         super(scene);
         this.initBuffers();
+
+        this.wingMaterial = new CGFappearance(this.scene);
+        
+        this.wingMaterial.setAmbient(...wingColor, 1);
+        this.wingMaterial.setDiffuse(...wingColor, 1);
+        this.wingMaterial.setSpecular(0, 0, 0, 0);
+        this.wingMaterial.setShininess(10.0);
     }
 
     initBuffers() {
@@ -28,7 +35,7 @@ export class MyWing extends CGFobject {
             0, 0, 0, // 0
             0, 0, 1, // 1
             ...junctionVertexes,
-            2, -0.1, 0.5, // 4
+            2, -0.1, 0.9, // 4
 
         ]
 
@@ -90,5 +97,12 @@ export class MyWing extends CGFobject {
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
+    }
+
+    display() {
+
+        this.wingMaterial.apply();
+
+        super.display();
     }
 }

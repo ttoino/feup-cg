@@ -10,7 +10,7 @@ export class MyBirdHead extends CGFobject {
         this.lEye = new MySphere(this.scene, 10, 10, false, false);
         this.rEye = new MySphere(this.scene, 10, 10, false, false);
 
-        this.beak = new MyCone(this.scene, 25, 20);
+        this.beak = new MyCone(this.scene, 300, 100);
 
         this.head = new MySphere(this.scene, 10, 10, false, false);
 
