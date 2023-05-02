@@ -3,10 +3,10 @@ import {
     CGFcamera,
     CGFaxis,
     CGFappearance,
-    CGFshader,
     CGFtexture,
 } from "../lib/CGF.js";
 import { MyBird } from "./MyBird.js";
+import { MyBirdEgg } from "./MyBirdEgg.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyTerrain } from "./MyTerrain.js";
 
@@ -47,6 +47,7 @@ export class MyScene extends CGFscene {
             this,
             new CGFtexture(this, "images/panorama4.jpg")
         );
+        this.egg = new MyBirdEgg(this, 20, 20);
 
         this.bird = new MyBird(this);
 
@@ -56,10 +57,7 @@ export class MyScene extends CGFscene {
 
         this.enableTextures(true);
 
-        this.texture = new CGFtexture(this, "images/terrain.jpg");
         this.appearance = new CGFappearance(this);
-        this.appearance.setTexture(this.texture);
-        this.appearance.setTextureWrap("REPEAT", "REPEAT");
 
         this.enableNormalViz = false;
 
@@ -126,9 +124,9 @@ export class MyScene extends CGFscene {
 
         this.panorama.display();
         this.bird.display();
+        this.egg.display();
 
         this.pushMatrix();
-        this.appearance.apply();
         this.translate(0, -100, 0);
         this.scale(400, 400, 400);
         this.rotate(-Math.PI / 2.0, 1, 0, 0);
