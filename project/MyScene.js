@@ -8,7 +8,7 @@ import {
 } from "../lib/CGF.js";
 import { MyBird } from "./MyBird.js";
 import { MyPanorama } from "./MyPanorama.js";
-import { MyPlane } from "./MyPlane.js";
+import { MyTerrain } from "./MyTerrain.js";
 
 /**
  * MyScene
@@ -35,7 +35,14 @@ export class MyScene extends CGFscene {
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
-        this.plane = new MyPlane(this, 30);
+        this.terrain = new MyTerrain(
+            this,
+            128,
+            0.2,
+            new CGFtexture(this, "images/terrain.jpg"),
+            new CGFtexture(this, "images/heightmap.jpg"),
+            new CGFtexture(this, "images/altimetry.png")
+        );
         this.panorama = new MyPanorama(
             this,
             new CGFtexture(this, "images/panorama4.jpg")
@@ -125,7 +132,7 @@ export class MyScene extends CGFscene {
         this.translate(0, -100, 0);
         this.scale(400, 400, 400);
         this.rotate(-Math.PI / 2.0, 1, 0, 0);
-        this.plane.display();
+        this.terrain.display();
         this.popMatrix();
 
         // ---- END Primitive drawing section

@@ -2,7 +2,7 @@ import { CGFobject, CGFappearance, CGFtexture } from '../lib/CGF.js';
 import { MySphere } from "./MySphere.js";
 
 /**
- * MyTriangle
+ * MyPanorama
  * @constructor
  * @param scene - Reference to MyScene object
  */
@@ -36,4 +36,3 @@ export class MyPanorama extends CGFobject {
         this.scene.popMatrix();
     }
 }
-
