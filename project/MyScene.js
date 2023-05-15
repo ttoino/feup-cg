@@ -69,6 +69,7 @@ export class MyScene extends CGFscene {
     checkKeys(delta) {
         if (this.gui.isKeyPressed("KeyW")) {
             this.bird.zPos += this.bird.birdSpeed * delta * 0.5;
+            this.camera.moveForward(this.bird.birdSpeed * delta * 0.5);
         }
     }
 
@@ -85,7 +86,7 @@ export class MyScene extends CGFscene {
             0.1,
             1000,
             vec3.fromValues(this.bird.xPos, this.bird.yPos + 10, this.bird.zPos - 15),
-            vec3.fromValues(0, 0, 0)
+            vec3.fromValues(this.bird.xPos, this.bird.yPos, this.bird.zPos)
         );
     }
 
@@ -109,7 +110,7 @@ export class MyScene extends CGFscene {
         }
         
         // this.camera.setPosition([this.bird.xPos, this.bird.yPos + 10, this.bird.zPos - 15]);
-        // this.camera.setTarget([this.bird.xPos, this.bird.yPos, this.bird.zPos]);
+        this.camera.setTarget([this.bird.xPos, this.bird.yPos, this.bird.zPos]);
 
         super.update();
     }
