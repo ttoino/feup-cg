@@ -22,6 +22,9 @@ export class MyScene extends CGFscene {
     init(application) {
         super.init(application);
 
+        // initialize this early because the camera needs it to set its initial position
+        this.bird = new MyBird(this);
+
         this.initCameras();
         this.initLights();
 
@@ -49,8 +52,6 @@ export class MyScene extends CGFscene {
         );
         this.egg = new MyBirdEgg(this, 20, 20);
 
-        this.bird = new MyBird(this);
-
         //Objects connected to MyInterface
         this.displayAxis = true;
         this.scaleFactor = 1;
@@ -62,13 +63,12 @@ export class MyScene extends CGFscene {
         this.enableNormalViz = false;
 
         this.setUpdatePeriod(50);
+        this.lastUpdateTime = -1;
     }
 
-    checkKeys() {
+    checkKeys(delta) {
         if (this.gui.isKeyPressed("KeyW")) {
-            this.camera.moveForward(1);
-        } else if (this.gui.isKeyPressed("KeyS")) {
-            this.camera.moveForward(-1);
+            this.bird.zPos += this.bird.birdSpeed * delta * 0.5;
         }
     }
 
@@ -84,7 +84,7 @@ export class MyScene extends CGFscene {
             1.0,
             0.1,
             1000,
-            vec3.fromValues(50, 10, 15),
+            vec3.fromValues(this.bird.xPos, this.bird.yPos + 10, this.bird.zPos - 15),
             vec3.fromValues(0, 0, 0)
         );
     }
@@ -97,7 +97,19 @@ export class MyScene extends CGFscene {
     }
 
     update(time) {
-        this.checkKeys();
+
+        if (this.lastUpdateTime == -1) {
+            this.lastUpdateTime = time;
+        } else {
+
+            const delta = (time - this.lastUpdateTime) / 1000.0;
+
+            this.checkKeys(delta);
+            this.lastUpdateTime = time;
+        }
+        
+        // this.camera.setPosition([this.bird.xPos, this.bird.yPos + 10, this.bird.zPos - 15]);
+        // this.camera.setTarget([this.bird.xPos, this.bird.yPos, this.bird.zPos]);
 
         super.update();
     }

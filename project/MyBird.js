@@ -15,8 +15,9 @@ export class MyBird extends CGFobject {
      *
      * @param {CGFscene} scene
      */
-    constructor(scene) {
+    constructor(scene, startingX = 0, startingY = 0, startingZ = 0, birdSpeed = 5) {
         super(scene);
+
         this.initBuffers();
         const birdColor = [0.2823529, 0.149, 0.05098]
 
@@ -26,19 +27,23 @@ export class MyBird extends CGFobject {
         this.body = new MyBirdBody(this.scene, birdColor);
 
         this.head = new MyBirdHead(this.scene, birdColor);
+
+        this.xPos = startingX;
+        this.yPos = startingY;
+        this.zPos = startingZ;
+
+        this.birdSpeed = birdSpeed;
     }
 
     displayWings() {
         this.scene.pushMatrix();
-        this.scene.translate(0.45, 0.25, -.1);
-        // this.scene.rotate(0.5, -1, 0, 0);
+        this.scene.translate(0.4, 0.25, -.1);
         this.lWing.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(-0.45, 0.25, -.1);
+        this.scene.translate(-0.4, 0.25, -.1);
         this.scene.scale(-1, 1, 1);
-        // this.scene.rotate(0.5, -1, 0, 0);
         this.rWing.display();
         this.scene.popMatrix();
     }
@@ -74,8 +79,13 @@ export class MyBird extends CGFobject {
     }
 
     display() {
+        this.scene.pushMatrix();
+        this.scene.translate(this.xPos, this.yPos, this.zPos);
+
         this.displayWings();
         this.displayBody();
         this.displayHead();
+
+        this.scene.popMatrix();
     }
 }

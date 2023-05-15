@@ -42,12 +42,10 @@ export class MyWing extends CGFobject {
         this.vertices = [
             // upside
             ...vertexBase,
+            ...junctionVertexes,
 
             // downside
             ...vertexBase,
-
-            ...junctionVertexes,
-
             ...junctionVertexes,
         ];
 
@@ -56,21 +54,13 @@ export class MyWing extends CGFobject {
             2, 1, 3,
             2, 3, 4,
 
-            5, 2, 1,
-            2, 3, 1,
-            2, 4, 3,
+            0, 1, 5,
+            5, 1, 6,
         ]
 
         this.indices = [
             ...indexBase,
-            ...indexBase.map(x => x + 5),
-
-            0, 1, 10,
-            10, 1, 11,
-
-            0, 1, 12,
-            12, 1, 13,
-
+            ...indexBase.map(x => x + 2),
         ]
 
         const arm = [-1, 3, 0];
@@ -78,21 +68,20 @@ export class MyWing extends CGFobject {
         const normalLen = Math.sqrt(arm.reduce((a, b) => a + b * b, 0))
 
         this.normals = [
-            ...arm.map(x => -x / normalLen),
-            ...arm.map(x => -x / normalLen),
-            ...tipNormal.map(x => -x / normalLen),
-            ...tipNormal.map(x => -x / normalLen),
-            ...tipNormal.map(x => -x / normalLen),
+            ...arm.map(x => x / normalLen),
+            ...arm.map(x => x / normalLen),
             ...arm.map(x => x / normalLen),
             ...arm.map(x => x / normalLen),
             ...tipNormal.map(x => x / normalLen),
             ...tipNormal.map(x => x / normalLen),
             ...tipNormal.map(x => x / normalLen),
-
-            ...arm.map(x => x / normalLen),
-            ...arm.map(x => x / normalLen),
             ...arm.map(x => -x / normalLen),
             ...arm.map(x => -x / normalLen),
+            ...arm.map(x => -x / normalLen),
+            ...arm.map(x => -x / normalLen),
+            ...tipNormal.map(x => -x / normalLen),
+            ...tipNormal.map(x => -x / normalLen),
+            ...tipNormal.map(x => -x / normalLen),
         ]
 
         this.primitiveType = this.scene.gl.TRIANGLES;
