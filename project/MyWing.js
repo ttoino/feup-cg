@@ -32,7 +32,7 @@ export class MyWing extends CGFobject {
         ]
 
         const vertexBase = [
-            0, 0, 0, // 0
+            0, 0, .1, // 0
             0, 0, 1, // 1
             ...junctionVertexes,
             2, -0.1, 0.9, // 4

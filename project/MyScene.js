@@ -124,7 +124,6 @@ export class MyScene extends CGFscene {
 
         this.panorama.display();
         this.bird.display();
-        this.egg.display();
 
         this.pushMatrix();
         this.translate(0, -100, 0);

@@ -30,13 +30,15 @@ export class MyBird extends CGFobject {
 
     displayWings() {
         this.scene.pushMatrix();
-        this.scene.translate(0.45, 0.25, 0);
+        this.scene.translate(0.45, 0.25, -.1);
+        // this.scene.rotate(0.5, -1, 0, 0);
         this.lWing.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(-0.45, 0.25, 0);
+        this.scene.translate(-0.45, 0.25, -.1);
         this.scene.scale(-1, 1, 1);
+        // this.scene.rotate(0.5, -1, 0, 0);
         this.rWing.display();
         this.scene.popMatrix();
     }
@@ -65,7 +67,7 @@ export class MyBird extends CGFobject {
 
     displayHead() {
         this.scene.pushMatrix();
-        this.scene.translate(0, 0.5, 1.4);
+        this.scene.translate(0, 0.45, 1.3);
         this.scene.scale(0.4, 0.4, 0.4)
         this.head.display();
         this.scene.popMatrix();
