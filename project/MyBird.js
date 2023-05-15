@@ -78,6 +78,10 @@ export class MyBird extends CGFobject {
         this.scene.popMatrix();
     }
 
+    update(timeSinceAppStart) {
+        this.yPos = 0.5*Math.sin(timeSinceAppStart*Math.PI*1.5);
+    }
+
     display() {
         this.scene.pushMatrix();
         this.scene.translate(this.xPos, this.yPos, this.zPos);
