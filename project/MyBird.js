@@ -15,7 +15,7 @@ export class MyBird extends CGFobject {
      *
      * @param {CGFscene} scene
      */
-    constructor(scene, startingX = 0, startingY = 0, startingZ = 0, birdSpeed = 5) {
+    constructor(scene, startingX = 0, startingY = 0, startingZ = 0, birdSpeed = 0, startingYRotation = 0) {
         super(scene);
 
         this.initBuffers();
@@ -32,7 +32,20 @@ export class MyBird extends CGFobject {
         this.yPos = startingY;
         this.zPos = startingZ;
 
+        this.startingXPos = startingX;
+        this.startingYPos = startingY;
+        this.startingZPos = startingZ;
+
+        this.yRotation = startingYRotation;
+
+        this.startingYRotation = startingYRotation;
+
+        this.birdYaw = 0;
+        this.desiredBirdYaw = 0;
+        this.turning = false;
+
         this.birdSpeed = birdSpeed;
+        this.lastUpdate = -1;
     }
 
     displayWings() {
@@ -78,13 +91,65 @@ export class MyBird extends CGFobject {
         this.scene.popMatrix();
     }
 
+    accelerate(amount) {
+        this.birdSpeed += amount;
+
+        if (this.birdSpeed < 0) {
+            this.birdSpeed = 0;
+        }
+    }
+
+    turn(amount) {
+        this.yRotation += amount;
+        this.desiredBirdYaw = Math.PI / 4 * (amount < 0 ? 1 : -1);
+        this.turning = true;
+    }
+
+    reset() {
+        this.birdSpeed = 0;
+        this.xPos = this.startingXPos;
+        this.yPos = this.startingYPos;
+        this.zPos = this.startingZPos;
+        this.yRotation = this.startingYRotation;
+        this.desiredBirdYaw = 0;
+    }
+
     update(timeSinceAppStart) {
-        this.yPos = 0.5*Math.sin(timeSinceAppStart*Math.PI*1.5);
+        if (this.lastUpdate === -1) {
+            this.lastUpdate = timeSinceAppStart;
+        } else {
+
+            const delta = timeSinceAppStart - this.lastUpdate;
+            this.lastUpdate = timeSinceAppStart;
+
+            const displacement = this.birdSpeed * delta * 0.5
+
+            this.zPos += displacement * Math.cos(this.yRotation);
+            this.xPos += displacement * Math.sin(this.yRotation);
+            this.yPos = 0.1 * Math.sin(timeSinceAppStart * Math.PI * 1.5);
+
+            if (this.turning) {
+                const delta = this.desiredBirdYaw - this.birdYaw;
+                this.birdYaw += delta * 0.1;
+                if (Math.abs(delta) < 0.01) {
+                    this.birdYaw = this.desiredBirdYaw;
+                }
+            } else {
+                const delta = -this.birdYaw;
+                this.birdYaw += delta * 0.1;
+                if (Math.abs(this.birdYaw) < 0.01) {
+                    this.birdYaw = 0;
+                }
+            }
+            this.turning = false;
+        }
     }
 
     display() {
         this.scene.pushMatrix();
         this.scene.translate(this.xPos, this.yPos, this.zPos);
+        this.scene.rotate(this.yRotation, 0, 1, 0);
+        this.scene.rotate(this.birdYaw, 0, 0, 1);
 
         this.displayWings();
         this.displayBody();

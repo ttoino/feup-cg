@@ -1,4 +1,4 @@
-import { CGFobject, CGFappearance } from "../lib/CGF.js";
+import { CGFobject, CGFappearance, CGFshader } from "../lib/CGF.js";
 
 /**
  * MySphere
@@ -17,11 +17,20 @@ export class MyWing extends CGFobject {
         this.initBuffers();
 
         this.wingMaterial = new CGFappearance(this.scene);
-        
+
         this.wingMaterial.setAmbient(...wingColor, 1);
         this.wingMaterial.setDiffuse(...wingColor, 1);
         this.wingMaterial.setSpecular(0, 0, 0, 0);
         this.wingMaterial.setShininess(10.0);
+
+        /* this.motionShader = new CGFshader(
+            scene.gl,
+            "shaders/wing.vert",
+            "shaders/wing.frag"
+        );
+        this.motionShader.setUniformsValues({
+            tipOffset: 1
+        }); */
     }
 
     initBuffers() {
@@ -89,9 +98,10 @@ export class MyWing extends CGFobject {
     }
 
     display() {
-
+        // this.scene.setActiveShader(this.shader);
         this.wingMaterial.apply();
 
         super.display();
+        // this.scene.setActiveShader(this.scene.defaultShader);
     }
 }

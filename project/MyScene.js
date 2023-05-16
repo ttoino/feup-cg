@@ -63,16 +63,29 @@ export class MyScene extends CGFscene {
 
         this.enableNormalViz = false;
 
-        this.setUpdatePeriod(50);
+        this.setUpdatePeriod(5);
         this.lastUpdateTime = -1;
 
         this.appStartTime = Date.now();
+
+        this.thirdPersonCamera = false;
     }
 
-    checkKeys(delta) {
+    checkKeys() {
         if (this.gui.isKeyPressed("KeyW")) {
-            this.bird.zPos += this.bird.birdSpeed * delta * 0.5;
-            this.camera.moveForward(this.bird.birdSpeed * delta * 0.5);
+            this.bird.accelerate(0.5);
+        } else if (this.gui.isKeyPressed("KeyS")) {
+            this.bird.accelerate(-0.5);
+        } else if (this.gui.isKeyPressed("KeyF")) {
+            this.thirdPersonCamera = false;
+        } else if (this.gui.isKeyPressed("KeyT")) {
+            this.thirdPersonCamera = true;
+        } else if (this.gui.isKeyPressed("KeyR")) {
+            this.bird.reset();
+        } else if (this.gui.isKeyPressed("KeyA")) {
+            this.bird.turn(0.02);
+        } else if (this.gui.isKeyPressed("KeyD")) {
+            this.bird.turn(-0.02);
         }
     }
 
@@ -108,17 +121,27 @@ export class MyScene extends CGFscene {
 
             const delta = (time - this.lastUpdateTime) / 1000.0;
 
-            this.checkKeys(delta);
+            this.checkKeys();
+         
             this.lastUpdateTime = time;
+            const timeSinceAppStart = (time - this.appStartTime) / 1000.0;
+    
+            this.bird.update(timeSinceAppStart);
+
+            console.log(this.thirdPersonCamera);
+
+            const cameraXPos = this.bird.xPos - Math.sin(this.bird.yRotation) * 15;
+            const cameraYPos = this.birdInitialYPos + 10;
+            const cameraZPos = this.bird.zPos - Math.cos(this.bird.yRotation) * 15;
+
+            if (this.thirdPersonCamera) {
+                this.camera.setPosition([cameraXPos, cameraYPos, cameraZPos]);
+                // this.camera.moveForward(this.bird.birdSpeed * delta * 0.5);
+                this.camera.setTarget([this.bird.xPos, this.birdInitialYPos, this.bird.zPos]);
+            }
+            
+            super.update();
         }
-
-        const timeSinceAppStart = (time - this.appStartTime) / 1000.0;
-
-        this.bird.update(timeSinceAppStart);
-        // this.camera.setPosition([this.bird.xPos, this.bird.yPos + 10, this.bird.zPos - 15]);
-        this.camera.setTarget([this.bird.xPos, this.birdInitialYPos, this.bird.zPos]);
-
-        super.update();
     }
 
     display() {
