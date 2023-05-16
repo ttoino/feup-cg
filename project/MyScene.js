@@ -7,6 +7,7 @@ import {
 } from "../lib/CGF.js";
 import { MyBird } from "./MyBird.js";
 import { MyBirdEgg } from "./MyBirdEgg.js";
+import { MyNest } from "./MyNest.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyTerrain } from "./MyTerrain.js";
 import { MyWing } from "./MyWing.js";
@@ -23,11 +24,6 @@ export class MyScene extends CGFscene {
     init(application) {
         super.init(application);
 
-        // initialize this early because the camera needs it to set its initial position
-        this.bird = new MyBird(this);
-        this.birdInitialYPos = this.bird.yPos;
-
-        this.initCameras();
         this.initLights();
 
         //Background color
@@ -38,22 +34,33 @@ export class MyScene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
+        // Textures
+        this.textures = Object.freeze({
+            terrain: new CGFtexture(this, "images/terrain.jpg"),
+            heightMap: new CGFtexture(this, "images/heightmap.jpg"),
+            altimetry: new CGFtexture(this, "images/altimetry.png"),
+            egg: new CGFtexture(this, "images/egg.jpg"),
+            nest: new CGFtexture(this, "images/thatch.jpg"),
+            panorama: new CGFtexture(this, "images/panorama4.jpg"),
+        });
+
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.terrain = new MyTerrain(
             this,
             128,
-            0.2,
-            new CGFtexture(this, "images/terrain.jpg"),
-            new CGFtexture(this, "images/heightmap.jpg"),
-            new CGFtexture(this, "images/altimetry.png")
+            this.terrainScaleFactor,
+            this.textures.terrain,
+            this.textures.heightMap,
+            this.textures.altimetry
         );
-
-        this.panorama = new MyPanorama(
-            this,
-            new CGFtexture(this, "images/panorama4.jpg")
-        );
+        this.panorama = new MyPanorama(this, this.textures.panorama);
         this.egg = new MyBirdEgg(this, 20, 20);
+        this.nest = new MyNest(this, 5, 5, 0.9, this.textures.nest);
+        this.bird = new MyBird(this);
+        this.birdInitialYPos = this.bird.yPos;
+
+        this.initCameras();
 
         //Objects connected to MyInterface
         this.displayAxis = true;
@@ -109,8 +116,16 @@ export class MyScene extends CGFscene {
             1.0,
             0.1,
             1000,
-            vec3.fromValues(this.bird.xPos, this.bird.yPos + 10, this.bird.zPos - 15),
-            vec3.fromValues(this.bird.xPos, this.birdInitialYPos, this.bird.zPos)
+            vec3.fromValues(
+                this.bird.xPos,
+                this.bird.yPos + 10,
+                this.bird.zPos - 15
+            ),
+            vec3.fromValues(
+                this.bird.xPos,
+                this.birdInitialYPos,
+                this.bird.zPos
+            )
         );
     }
 
@@ -122,11 +137,9 @@ export class MyScene extends CGFscene {
     }
 
     update(time) {
-
         if (this.lastUpdateTime == -1) {
             this.lastUpdateTime = time;
         } else {
-
             const delta = (time - this.lastUpdateTime) / 1000.0;
 
             this.checkKeys();
@@ -150,6 +163,18 @@ export class MyScene extends CGFscene {
             
             super.update();
         }
+
+        const timeSinceAppStart = (time - this.appStartTime) / 1000.0;
+
+        this.bird.update(timeSinceAppStart);
+        // this.camera.setPosition([this.bird.xPos, this.bird.yPos + 10, this.bird.zPos - 15]);
+        this.camera.setTarget([
+            this.bird.xPos,
+            this.birdInitialYPos,
+            this.bird.zPos,
+        ]);
+
+        super.update();
     }
 
     display() {
