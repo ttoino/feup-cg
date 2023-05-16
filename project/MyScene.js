@@ -10,7 +10,8 @@ import { MyBirdEgg } from "./MyBirdEgg.js";
 import { MyNest } from "./MyNest.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyTerrain } from "./MyTerrain.js";
-import { MyWing } from "./MyWing.js";
+import { MyTree } from "./MyTree.js";
+import { lerp2 } from "./MyMath.js";
 
 /**
  * MyScene
@@ -34,6 +35,12 @@ export class MyScene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
+        // Constants
+        this.terrainSize = 400;
+        this.terrainPos = -100;
+        this.terrainScaleFactor = 0.2;
+        this.numTrees = 400;
+
         // Textures
         this.textures = Object.freeze({
             terrain: new CGFtexture(this, "images/terrain.jpg"),
@@ -41,8 +48,14 @@ export class MyScene extends CGFscene {
             altimetry: new CGFtexture(this, "images/altimetry.png"),
             egg: new CGFtexture(this, "images/egg.jpg"),
             nest: new CGFtexture(this, "images/thatch.jpg"),
+            tree: new CGFtexture(this, "images/billboardtree.png"),
             panorama: new CGFtexture(this, "images/panorama4.jpg"),
         });
+
+        this.textures.heightMap.image.addEventListener(
+            "load",
+            this.onHeightMapLoad.bind(this)
+        );
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
@@ -199,14 +212,80 @@ export class MyScene extends CGFscene {
 
         this.panorama.display();
         this.bird.display();
+        // this.egg.display();
+        // this.nest.display();
+        this.trees.forEach((tree) => tree.display());
 
         this.pushMatrix();
         this.translate(0, -100, 0);
-        this.scale(400, 400, 400);
+        this.scale(this.terrainSize, this.terrainSize, this.terrainSize);
         this.rotate(-Math.PI / 2.0, 1, 0, 0);
         this.terrain.display();
         this.popMatrix();
 
         // ---- END Primitive drawing section
+    }
+
+    onHeightMapLoad() {
+        const canvas = document.createElement("canvas", {
+            width: this.textures.heightMap.image.width,
+            height: this.textures.heightMap.image.height,
+        });
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(this.textures.heightMap.image, 0, 0);
+        this.heightMap = ctx.getImageData(
+            0,
+            0,
+            this.textures.heightMap.image.width,
+            this.textures.heightMap.image.height
+        ).data;
+
+        this.trees = [];
+        for (let i = 0; i < this.numTrees; i++) {
+            const x = (Math.random() - 0.5) * this.terrainSize;
+            const z = (Math.random() - 0.5) * this.terrainSize;
+            const y = this.getHeight(x, z);
+            this.trees.push(new MyTree(this, this.textures.tree, x, y, z));
+        }
+    }
+
+    /**
+     * @param {number} x
+     * @param {number} z
+     * @returns {number}
+     */
+    getHeight(x, z) {
+        let u =
+            (x / this.terrainSize + 0.5) * this.textures.heightMap.image.width;
+        let v =
+            (z / this.terrainSize + 0.5) * this.textures.heightMap.image.height;
+        const t = u % 1;
+        const s = v % 1;
+
+        u = Math.floor(u);
+        v = Math.floor(v);
+        const u2 = Math.min(u + 1, this.textures.heightMap.image.width - 1);
+        const v2 = Math.min(v + 1, this.textures.heightMap.image.height - 1);
+
+        if (
+            u < 0 ||
+            u >= this.textures.heightMap.image.width ||
+            v < 0 ||
+            v >= this.textures.heightMap.image.height
+        )
+            return this.terrainPos;
+
+        const a =
+            this.heightMap[(v * this.textures.heightMap.image.width + u) * 4];
+        const b =
+            this.heightMap[(v * this.textures.heightMap.image.width + u2) * 4];
+        const c =
+            this.heightMap[(v2 * this.textures.heightMap.image.width + u) * 4];
+        const d =
+            this.heightMap[(v2 * this.textures.heightMap.image.width + u2) * 4];
+
+        return (
+            lerp2(a, b, c, d, t, s) * this.terrainScaleFactor + this.terrainPos
+        );
     }
 }
