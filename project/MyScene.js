@@ -76,13 +76,19 @@ export class MyScene extends CGFscene {
             this.bird.accelerate(0.5);
         } else if (this.gui.isKeyPressed("KeyS")) {
             this.bird.accelerate(-0.5);
-        } else if (this.gui.isKeyPressed("KeyF")) {
+        } 
+        
+        if (this.gui.isKeyPressed("KeyF")) {
             this.thirdPersonCamera = false;
         } else if (this.gui.isKeyPressed("KeyT")) {
             this.thirdPersonCamera = true;
-        } else if (this.gui.isKeyPressed("KeyR")) {
+        } 
+        
+        if (this.gui.isKeyPressed("KeyR")) {
             this.bird.reset();
-        } else if (this.gui.isKeyPressed("KeyA")) {
+        } 
+        
+        if (this.gui.isKeyPressed("KeyA")) {
             this.bird.turn(0.02);
         } else if (this.gui.isKeyPressed("KeyD")) {
             this.bird.turn(-0.02);
@@ -130,9 +136,9 @@ export class MyScene extends CGFscene {
 
             console.log(this.thirdPersonCamera);
 
-            const cameraXPos = this.bird.xPos - Math.sin(this.bird.yRotation) * 15;
+            const cameraXPos = this.bird.xPos - Math.sin(this.bird.birdYaw) * 15;
             const cameraYPos = this.birdInitialYPos + 10;
-            const cameraZPos = this.bird.zPos - Math.cos(this.bird.yRotation) * 15;
+            const cameraZPos = this.bird.zPos - Math.cos(this.bird.birdYaw) * 15;
 
             if (this.thirdPersonCamera) {
                 this.camera.setPosition([cameraXPos, cameraYPos, cameraZPos]);
