@@ -75,7 +75,7 @@ export class MyScene extends CGFscene {
         this.panorama = new MyPanorama(this, this.textures.panorama);
         this.egg = new MyBirdEgg(this, 20, 20);
         this.nest = new MyNest(this, 5, 5, 0.9, this.textures.nest);
-        this.bird = new MyBird(this);
+        this.bird = new MyBird(this, 0, -40, 0);
         this.birdInitialYPos = this.bird.yPos;
 
         this.initCameras();
