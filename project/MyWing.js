@@ -14,8 +14,10 @@ export class MyWing extends CGFobject {
      */
     constructor(scene, wingColor) {
         super(scene);
-        this.initBuffers();
 
+        this.outterWing = new CGFobject(this.scene);
+        this.innerWing = new CGFobject(this.scene);
+        
         this.wingMaterial = new CGFappearance(this.scene);
 
         this.wingMaterial.setAmbient(...wingColor, 1);
@@ -23,85 +25,112 @@ export class MyWing extends CGFobject {
         this.wingMaterial.setSpecular(0, 0, 0, 0);
         this.wingMaterial.setShininess(10.0);
 
-        /* this.motionShader = new CGFshader(
-            scene.gl,
-            "shaders/wing.vert",
-            "shaders/wing.frag"
-        );
-        this.motionShader.setUniformsValues({
-            tipOffset: 1
-        }); */
+        this.innerWingRotation = -Math.PI / 7;
+        this.outterWingRotation = Math.PI / 17;
+
+        this.turning = false;
+
+        this.initBuffers();
     }
 
     initBuffers() {
+        this.innerWing.vertices = [
+            0, 0, 0.1,
+            0, 0, 1,
+            1, 0, 0,
+            1, 0, 1,
 
-        const junctionVertexes = [
-            1, 0.2, 0,
-            1, 0.2, 1,
-        ]
-
-        const vertexBase = [
-            0, 0, .1, // 0
-            0, 0, 1, // 1
-            ...junctionVertexes,
-            2, -0.1, 0.9, // 4
-
-        ]
-
-        this.vertices = [
-            // upside
-            ...vertexBase,
-            ...junctionVertexes,
-
-            // downside
-            ...vertexBase,
-            ...junctionVertexes,
+            0, 0, 0.1,
+            0, 0, 1,
+            1, 0, 0,
+            1, 0, 1,
         ];
 
-        const indexBase = [
+        this.innerWing.indices = [
             0, 1, 2,
             2, 1, 3,
-            2, 3, 4,
 
-            0, 1, 5,
-            5, 1, 6,
-        ]
+            4, 6, 5,
+            6, 7, 5,
+        ];
 
-        this.indices = [
-            ...indexBase,
-            ...indexBase.map(x => x + 2),
-        ]
+        this.innerWing.normals = [
+            0, 1, 0,
+            0, 1, 0,
+            0, 1, 0,
+            0, 1, 0,
 
-        const arm = [-1, 3, 0];
-        const tipNormal = [-arm[0], arm[1], arm[2]];
-        const normalLen = Math.sqrt(arm.reduce((a, b) => a + b * b, 0))
+            0, -1, 0,
+            0, -1, 0,
+            0, -1, 0,
+            0, -1, 0,
+        ];
+        
+        this.innerWing.primitiveType = this.scene.gl.TRIANGLES;
+        this.innerWing.initGLBuffers();
 
-        this.normals = [
-            ...arm.map(x => x / normalLen),
-            ...arm.map(x => x / normalLen),
-            ...arm.map(x => x / normalLen),
-            ...arm.map(x => x / normalLen),
-            ...tipNormal.map(x => x / normalLen),
-            ...tipNormal.map(x => x / normalLen),
-            ...tipNormal.map(x => x / normalLen),
-            ...arm.map(x => -x / normalLen),
-            ...arm.map(x => -x / normalLen),
-            ...arm.map(x => -x / normalLen),
-            ...arm.map(x => -x / normalLen),
-            ...tipNormal.map(x => -x / normalLen),
-            ...tipNormal.map(x => -x / normalLen),
-            ...tipNormal.map(x => -x / normalLen),
-        ]
+        this.outterWing.vertices = [
+            0, 0, 0,
+            0, 0, 1,
+            0.9, 0, 0.7,
 
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
+            0, 0, 0,
+            0, 0, 1,
+            0.9, 0, 0.7,
+        ];
+
+        this.outterWing.indices = [
+            0, 1, 2,
+
+            3, 5, 4,
+        ];
+
+        this.outterWing.normals = [
+            0, 1, 0,
+            0, 1, 0,
+            0, 1, 0,
+
+            0, -1, 0,
+            0, -1, 0,
+            0, -1, 0,
+        ];
+        
+        this.outterWing.primitiveType = this.scene.gl.TRIANGLES;
+        this.outterWing.initGLBuffers();
+    }
+
+    enableNormalViz() {
+        this.innerWing.enableNormalViz();
+        this.outterWing.enableNormalViz();
+    }
+
+    disableNormalViz() {
+        this.innerWing.disableNormalViz();
+        this.outterWing.disableNormalViz();
+    }
+
+    update(t) {
+        if (t % 4 < 1) {
+            this.innerWingRotation = this.turning ? 0 : -Math.PI / 10 + Math.sin(-t * Math.PI * 3) * 1.8 * Math.PI / 7;
+            this.outterWingRotation = this.turning ? 0 : -Math.PI / 34 + Math.sin(-t * Math.PI * 3) * 1.2 * Math.PI / 17;
+        }
     }
 
     display() {
-        // this.scene.setActiveShader(this.shader);
         this.wingMaterial.apply();
+        
+        this.scene.pushMatrix()
+        
+        this.scene.rotate(this.outterWingRotation, 0, 0, 1);
 
-        super.display();
-        // this.scene.setActiveShader(this.scene.defaultShader);
+        this.innerWing.display();
+        
+        this.scene.pushMatrix()
+        this.scene.translate(1, 0, 0); // we can simply translate because the axis are rotated
+        this.scene.rotate(this.innerWingRotation, 0, 0, 1);
+        this.outterWing.display();
+        this.scene.popMatrix();
+
+        this.scene.popMatrix();
     }
 }

@@ -9,6 +9,7 @@ import { MyBird } from "./MyBird.js";
 import { MyBirdEgg } from "./MyBirdEgg.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyTerrain } from "./MyTerrain.js";
+import { MyWing } from "./MyWing.js";
 
 /**
  * MyScene
@@ -47,6 +48,7 @@ export class MyScene extends CGFscene {
             new CGFtexture(this, "images/heightmap.jpg"),
             new CGFtexture(this, "images/altimetry.png")
         );
+
         this.panorama = new MyPanorama(
             this,
             new CGFtexture(this, "images/panorama4.jpg")

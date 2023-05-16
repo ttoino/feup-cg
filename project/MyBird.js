@@ -129,12 +129,19 @@ export class MyBird extends CGFobject {
             this.yPos = 0.1 * Math.sin(timeSinceAppStart * Math.PI * 1.5);
 
             if (this.turning) {
+                this.lWing.turning = true;
+                this.rWing.turning = true;
+
                 const delta = this.desiredBirdRoll - this.birdRoll;
                 this.birdRoll += delta * 0.1;
                 if (Math.abs(delta) < 0.01) {
                     this.birdRoll = this.desiredBirdRoll;
                 }
+
             } else {
+                this.lWing.turning = false;
+                this.rWing.turning = false;
+
                 const delta = 0 - this.birdRoll;
                 this.birdRoll += delta * 0.1;
                 if (Math.abs(this.birdRoll) < 0.01) {
@@ -142,6 +149,9 @@ export class MyBird extends CGFobject {
                 }
             }
             this.turning = false;
+
+            this.lWing.update(timeSinceAppStart);
+            this.rWing.update(timeSinceAppStart);
         }
     }
 
