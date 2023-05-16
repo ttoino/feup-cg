@@ -7,12 +7,12 @@ export class MyBirdHead extends CGFobject {
     constructor(scene, headColor) {
         super(scene);
 
-        this.lEye = new MySphere(this.scene, 10, 10, false, false);
-        this.rEye = new MySphere(this.scene, 10, 10, false, false);
+        this.lEye = new MySphere(this.scene, 5, 5);
+        this.rEye = new MySphere(this.scene, 5, 5);
 
-        this.beak = new MyCone(this.scene, 300, 100);
+        this.beak = new MyCone(this.scene, 20, 5);
 
-        this.head = new MySphere(this.scene, 10, 10, false, false);
+        this.head = new MySphere(this.scene, 10, 10);
 
         /////////////////////////////////////////////////////
 
@@ -21,6 +21,7 @@ export class MyBirdHead extends CGFobject {
         this.eyeMaterial.setAmbient(1, 1, 1, 1);
         this.eyeMaterial.setDiffuse(1, 1, 1, 1);
         this.eyeMaterial.setSpecular(1, 1, 1, 1);
+        this.eyeMaterial.setTexture(scene.textures.eye);
         this.eyeMaterial.setShininess(250.0);
 
         //////////////////////////////////////////////////////
@@ -30,6 +31,7 @@ export class MyBirdHead extends CGFobject {
         this.breakMaterial.setAmbient(0.996, 0.745, 0, 1);
         this.breakMaterial.setDiffuse(0.996, 0.745, 0, 1);
         this.breakMaterial.setSpecular(0.996, 0.745, 0, 1);
+        this.breakMaterial.setTexture(scene.textures.beak);
         this.breakMaterial.setShininess(100.0);
 
         //////////////////////////////////////////////////////
@@ -39,23 +41,27 @@ export class MyBirdHead extends CGFobject {
         this.headMaterial.setAmbient(...headColor, 1);
         this.headMaterial.setDiffuse(...headColor, 1);
         this.headMaterial.setSpecular(...headColor, 1);
+        this.headMaterial.setTexture(this.scene.textures.birdhead);
         this.headMaterial.setShininess(100.0);
     }
 
     displayEyes() {
-
         this.eyeMaterial.apply();
 
         this.scene.pushMatrix();
         this.scene.scale(0.3, 0.3, 0.3);
 
+        const p = 1.7;
+
         this.scene.pushMatrix();
-        this.scene.translate(1.9, 1.9, 1.9);
+        this.scene.translate(p, p, p);
+        this.scene.rotate(-Math.PI/3, 0, 1, 0);
         this.lEye.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(-1.9, 1.9, 1.9);
+        this.scene.translate(-p, p, p);
+        this.scene.rotate(-2 * Math.PI / 3, 0, 1, 0);
         this.rEye.display();
         this.scene.popMatrix();
 
@@ -74,7 +80,6 @@ export class MyBirdHead extends CGFobject {
     }
 
     display() {
-
         this.headMaterial.apply();
         this.head.display();
 

@@ -10,12 +10,13 @@ export class MyBirdBody extends CGFobject {
     constructor(scene, bodyColor) {
         super(scene);
 
-        this.body = new MyEgg(this.scene, 50, 50);
+        this.body = new MyEgg(this.scene, 20, 20);
 
         this.bodyMaterial = new CGFappearance(this.scene);
         
         this.bodyMaterial.setAmbient(...bodyColor, 1);
         this.bodyMaterial.setDiffuse(...bodyColor, 1);
+        this.bodyMaterial.setTexture(this.scene.textures.birdbody);
         this.bodyMaterial.setSpecular(0, 0, 0, 0);
         this.bodyMaterial.setShininess(10.0);
     }

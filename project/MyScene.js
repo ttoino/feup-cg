@@ -43,10 +43,15 @@ export class MyScene extends CGFscene {
 
         // Textures
         this.textures = Object.freeze({
+            beak: new CGFtexture(this, "images/beak.png"),
+            birdbody: new CGFtexture(this, "images/birdbody.png"),
+            birdhead: new CGFtexture(this, "images/birdhead.png"),
             terrain: new CGFtexture(this, "images/terrain.jpg"),
             heightMap: new CGFtexture(this, "images/heightmap.jpg"),
             altimetry: new CGFtexture(this, "images/altimetry.png"),
             egg: new CGFtexture(this, "images/egg.jpg"),
+            eye: new CGFtexture(this, "images/eye.png"),
+            feathers: new CGFtexture(this, "images/feathers.png"),
             nest: new CGFtexture(this, "images/thatch.jpg"),
             tree: new CGFtexture(this, "images/billboardtree.png"),
             panorama: new CGFtexture(this, "images/panorama4.jpg"),

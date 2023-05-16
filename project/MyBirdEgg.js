@@ -30,6 +30,6 @@ export class MyBirdEgg extends CGFobject {
 
     display() {
         this.appearance.apply();
-        super.egg.display();
+        this.egg.display();
     }
 }

@@ -23,6 +23,7 @@ export class MyWing extends CGFobject {
         this.wingMaterial.setAmbient(...wingColor, 1);
         this.wingMaterial.setDiffuse(...wingColor, 1);
         this.wingMaterial.setSpecular(0, 0, 0, 0);
+        this.wingMaterial.setTexture(scene.textures.feathers);
         this.wingMaterial.setShininess(10.0);
 
         this.innerWingRotation = -Math.PI / 7;
