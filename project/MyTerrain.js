@@ -11,6 +11,7 @@ export class MyTerrain extends CGFobject {
      * 
      * @param {CGFscene} scene 
      * @param {number} n
+     * @param {number} scaleFactor
      * @param {CGFtexture} texture 
      * @param {CGFtexture} heightMap
      * @param {CGFtexture} altimetry
@@ -31,8 +32,8 @@ export class MyTerrain extends CGFobject {
         );
         this.shader.applyUniforms({
             uScaleFactor: scaleFactor,
-            uHeightSampler: 1,
-            uAltimetrySampler: 2,
+            uSamplerHeight: 1,
+            uSamplerAltimetry: 2,
         });
 
         this.texture = texture;

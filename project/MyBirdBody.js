@@ -7,18 +7,10 @@ import { MyEgg } from './MyEgg.js';
  * @param scene - Reference to MyScene object
  */
 export class MyBirdBody extends CGFobject {
-    constructor(scene, bodyColor) {
+    constructor(scene) {
         super(scene);
 
         this.body = new MyEgg(this.scene, 20, 20);
-
-        this.bodyMaterial = new CGFappearance(this.scene);
-        
-        this.bodyMaterial.setAmbient(...bodyColor, 1);
-        this.bodyMaterial.setDiffuse(...bodyColor, 1);
-        this.bodyMaterial.setTexture(this.scene.textures.birdbody);
-        this.bodyMaterial.setSpecular(0, 0, 0, 0);
-        this.bodyMaterial.setShininess(10.0);
     }
 
     enableNormalViz() {
@@ -30,7 +22,7 @@ export class MyBirdBody extends CGFobject {
     }
 
     display() {
-        this.bodyMaterial.apply();
+        this.scene.birdBodyMaterial.apply();
 
         this.scene.pushMatrix();
         this.scene.rotate(4 * Math.PI / 3, 1, 0, 0);

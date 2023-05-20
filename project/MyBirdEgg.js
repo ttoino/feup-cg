@@ -19,17 +19,10 @@ export class MyBirdEgg extends CGFobject {
         super(scene);
         
         this.egg = new MyEgg(this.scene, slices, stacks);
-
-        this.appearance = new CGFappearance(this.scene);
-        this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
-        this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
-        this.appearance.setTexture(
-            new CGFtexture(this.scene, "images/egg.jpg")
-        );
     }
 
     display() {
-        this.appearance.apply();
+        this.scene.eggMaterial.apply();
         this.egg.display();
     }
 }

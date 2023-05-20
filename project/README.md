@@ -18,3 +18,4 @@
 - [Egg](https://3dtextures.me/2021/03/25/egg-shell-001/)
 - [Eyes](https://www.3dxo.com/textures/5928_eye_brown)
 - [Nest](https://3dtextures.me/2021/01/26/thatched-roof-001/)
+- [Sky](https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky)

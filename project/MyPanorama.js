@@ -10,26 +10,21 @@ export class MyPanorama extends CGFobject {
     /**
      * 
      * @param {CGFscene} scene 
-     * @param {CGFtexture} texture 
      */
-    constructor(scene, texture) {
+    constructor(scene) {
         super(scene);
 
         //Initialize objects
         this.sphere = new MySphere(scene, 50, 50, true);
-
-        this.material = new CGFappearance(scene);
-        this.material.setEmission(1, 1, 1, 1);
-        this.material.setTexture(texture);
     }
 
     display() {
-        this.material.apply();
+        this.scene.panoramaMaterial.apply();
 
-        this.scene.pushMatrix();        
+        this.scene.pushMatrix();
         
-        this.scene.translate(...this.scene.camera.position);
-        this.scene.scale(200, 200, 200);
+        this.scene.translate(this.scene.camera.position[0], this.scene.terrainPos, this.scene.camera.position[2]);
+        this.scene.scale(this.scene.terrainSize, this.scene.terrainSize, this.scene.terrainSize);
         
         this.sphere.display();
 

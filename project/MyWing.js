@@ -18,14 +18,6 @@ export class MyWing extends CGFobject {
         this.outterWing = new CGFobject(this.scene);
         this.innerWing = new CGFobject(this.scene);
         
-        this.wingMaterial = new CGFappearance(this.scene);
-
-        this.wingMaterial.setAmbient(...wingColor, 1);
-        this.wingMaterial.setDiffuse(...wingColor, 1);
-        this.wingMaterial.setSpecular(0, 0, 0, 0);
-        this.wingMaterial.setTexture(scene.textures.feathers);
-        this.wingMaterial.setShininess(10.0);
-
         this.innerWingRotation = -Math.PI / 7;
         this.outterWingRotation = Math.PI / 17;
 
@@ -66,6 +58,18 @@ export class MyWing extends CGFobject {
             0, -1, 0,
             0, -1, 0,
         ];
+
+        this.innerWing.texCoords = [
+            0, 0.1,
+            0, 1,
+            1, 0,
+            1, 1,
+
+            0, 0.1,
+            0, 1,
+            1, 0,
+            1, 1,
+        ]
         
         this.innerWing.primitiveType = this.scene.gl.TRIANGLES;
         this.innerWing.initGLBuffers();
@@ -95,6 +99,16 @@ export class MyWing extends CGFobject {
             0, -1, 0,
             0, -1, 0,
         ];
+
+        this.outterWing.texCoords = [
+            0, 0,
+            0, 1,
+            .9, .7,
+
+            0, 0,
+            0, 1,
+            .9, .7,
+        ];
         
         this.outterWing.primitiveType = this.scene.gl.TRIANGLES;
         this.outterWing.initGLBuffers();
@@ -118,7 +132,7 @@ export class MyWing extends CGFobject {
     }
 
     display() {
-        this.wingMaterial.apply();
+        this.scene.birdWingMaterial.apply();
         
         this.scene.pushMatrix()
         

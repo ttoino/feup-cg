@@ -13,15 +13,13 @@ export class MyNest extends CGFobject {
      * @param {CGFscene} scene
      * @param {number} slices
      * @param {number} stacks
-     * @param {CGFtexture} texture
+     * @param {number} innerRadius
      */
-    constructor(scene, slices, stacks, innerRadius, texture) {
+    constructor(scene, slices, stacks, innerRadius) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
         this.innerRadius = innerRadius;
-        this.material = new CGFappearance(scene);
-        this.material.setTexture(texture);
         this.initBuffers();
     }
 
@@ -114,7 +112,7 @@ export class MyNest extends CGFobject {
     }
 
     display() {
-        this.material.apply();
+        this.scene.nestMaterial.apply();
         super.display();
     }
 }
