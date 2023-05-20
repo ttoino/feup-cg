@@ -1,4 +1,4 @@
-import { CGFappearance, CGFobject, CGFtexture } from "../lib/CGF.js";
+import { CGFappearance, CGFobject, CGFtexture } from "../../lib/CGF.js";
 
 /**
  * MyBirdEgg

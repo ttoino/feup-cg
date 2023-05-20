@@ -1,4 +1,4 @@
-import { CGFobject, CGFappearance, CGFshader } from "../lib/CGF.js";
+import { CGFobject, CGFappearance, CGFshader } from "../../lib/CGF.js";
 
 /**
  * MySphere
@@ -7,7 +7,7 @@ import { CGFobject, CGFappearance, CGFshader } from "../lib/CGF.js";
  * @param slices - number of divisions around the Y axis
  * @param stacks - number of divisions along the Y axis
  */
-export class MyWing extends CGFobject {
+export class MyBirdWing extends CGFobject {
     /**
      *
      * @param {CGFscene} scene

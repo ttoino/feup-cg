@@ -6,14 +6,14 @@ import {
     CGFtexture,
     CGFshader,
 } from "../lib/CGF.js";
-import { MyBird } from "./MyBird.js";
+import { MyBird } from "./bird/MyBird.js";
 import { MyBirdEgg } from "./MyBirdEgg.js";
 import { MyNest } from "./MyNest.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyTerrain } from "./MyTerrain.js";
-import { MyTree } from "./MyTree.js";
+import { MyTree } from "./billboards/MyTree.js";
 import { lerp2 } from "./MyMath.js";
-import { MyGrass } from "./MyGrass.js";
+import { MyGrass } from "./billboards/MyGrass.js";
 import { MyWater } from "./MyWater.js";
 
 /**
@@ -167,13 +167,13 @@ export class MyScene extends CGFscene {
         this.birdInitialYPos = this.bird.yPos;
 
         if (this.heightMap)
-            this.initTrees();
+            this.initBillboards();
         else
-            this.trees = [];
+            this.billboards = [];
     }
 
-    initTrees() {
-        this.trees = [];
+    initBillboards() {
+        this.billboards = [];
         for (let i = 0; i < this.numTrees;) {
             const x = (Math.random() - 0.5) * this.terrainSize;
             const z = (Math.random() - 0.5) * this.terrainSize;
@@ -181,7 +181,7 @@ export class MyScene extends CGFscene {
 
             if (y < this.minTreePos || y > this.maxTreePos) continue;
 
-            this.trees.push(new MyTree(this, x, y, z));
+            this.billboards.push(new MyTree(this, x, y, z));
             i++;
         }
         for (let i = 0; i < this.numGrass;) {
@@ -191,7 +191,7 @@ export class MyScene extends CGFscene {
 
             if (y < this.minTreePos || y > this.maxTreePos) continue;
 
-            this.trees.push(new MyGrass(this, x, y, z));
+            this.billboards.push(new MyGrass(this, x, y, z));
             i++;
         }
     }
@@ -333,7 +333,7 @@ export class MyScene extends CGFscene {
         this.bird.display();
         this.egg.display();
         this.nest.display();
-        this.trees.forEach((tree) => tree.display());
+        this.billboards.forEach((billboard) => billboard.display());
 
         this.pushMatrix();
         this.translate(0, this.terrainPos, 0);
@@ -359,7 +359,7 @@ export class MyScene extends CGFscene {
             this.terrainHeightMap.image.height
         ).data;
 
-        this.initTrees();
+        this.initBillboards();
     }
 
     /**

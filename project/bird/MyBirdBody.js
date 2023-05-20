@@ -1,5 +1,5 @@
-import { CGFobject, CGFappearance } from '../lib/CGF.js';
-import { MyEgg } from './MyEgg.js';
+import { CGFobject, CGFappearance } from '../../lib/CGF.js';
+import { MyEgg } from '../primitives/MyEgg.js';
 
 /**
  * MyTriangleSmall

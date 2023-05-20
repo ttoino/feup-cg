@@ -1,6 +1,6 @@
-import { CGFobject, CGFappearance } from "../lib/CGF.js";
-import { MyCone } from "./MyCone.js";
-import { MySphere } from "./MySphere.js";
+import { CGFobject, CGFappearance } from "../../lib/CGF.js";
+import { MyCone } from "../primitives/MyCone.js";
+import { MySphere } from "../primitives/MySphere.js";
 
 export class MyBirdHead extends CGFobject {
     constructor(scene, headColor) {

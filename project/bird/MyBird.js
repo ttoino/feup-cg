@@ -1,5 +1,5 @@
-import { CGFobject } from "../lib/CGF.js";
-import { MyWing } from "./MyWing.js";
+import { CGFobject } from "../../lib/CGF.js";
+import { MyBirdWing } from "./MyBirdWing.js";
 import { MyBirdBody } from "./MyBirdBody.js"
 import { MyBirdHead } from "./MyBirdHead.js"
 
@@ -21,8 +21,8 @@ export class MyBird extends CGFobject {
         this.initBuffers();
         const birdColor = [150/255, 75/255, 0/255]
 
-        this.lWing = new MyWing(this.scene, birdColor);
-        this.rWing = new MyWing(this.scene, birdColor);
+        this.lWing = new MyBirdWing(this.scene, birdColor);
+        this.rWing = new MyBirdWing(this.scene, birdColor);
 
         this.body = new MyBirdBody(this.scene, birdColor);
 

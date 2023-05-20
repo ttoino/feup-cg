@@ -1,5 +1,5 @@
 import { CGFobject, CGFappearance, CGFtexture, CGFshader } from '../lib/CGF.js';
-import { MyPlane } from "./MyPlane.js";
+import { MyPlane } from "./primitives/MyPlane.js";
 
 /**
  * MyTriangle

@@ -1,5 +1,5 @@
 import { CGFappearance, CGFobject, CGFtexture } from "../lib/CGF.js";
-import { MyEgg } from "./MyEgg.js";
+import { MyEgg } from "./primitives/MyEgg.js";
 
 /**
  * MyBirdEgg

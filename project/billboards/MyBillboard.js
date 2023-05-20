@@ -1,5 +1,5 @@
-import { CGFobject } from "../lib/CGF.js";
-import { MyQuad } from "./MyQuad.js";
+import { CGFobject } from "../../lib/CGF.js";
+import { MyQuad } from "../primitives/MyQuad.js";
 
 /**
  * MyBillboard
