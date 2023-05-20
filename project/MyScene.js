@@ -51,12 +51,19 @@ export class MyScene extends CGFscene {
         this.terrainSize = 400;
         this.terrainPos = -100;
         this.terrainScaleFactor = 0.2;
-        this.waterPos = this.terrainPos + this.terrainSize * this.terrainScaleFactor * 75 / 255;
+        this.waterPos =
+            this.terrainPos +
+            (this.terrainSize * this.terrainScaleFactor * 75) / 255;
         this.numTrees = 200;
         this.numGrass = 500;
+        this.numEggs = 10;
 
-        this.minTreePos = this.terrainPos + this.terrainSize * this.terrainScaleFactor * 80 / 255;
-        this.maxTreePos = this.terrainPos + this.terrainSize * this.terrainScaleFactor * 150 / 255;
+        this.minPos =
+            this.terrainPos +
+            (this.terrainSize * this.terrainScaleFactor * 80) / 255;
+        this.maxPos =
+            this.terrainPos +
+            (this.terrainSize * this.terrainScaleFactor * 150) / 255;
 
         this.initMaterials();
 
@@ -102,21 +109,21 @@ export class MyScene extends CGFscene {
         this.panoramaMaterial.loadTexture("images/sky.png");
 
         this.birdBodyMaterial = this.defaultMaterial();
-        this.birdBodyMaterial.setAmbient(150/255, 75/255, 0, 1);
-        this.birdBodyMaterial.setDiffuse(150/255, 75/255, 0, 1);
-        this.birdBodyMaterial.setSpecular(150/255, 75/255, 0, 1);
+        this.birdBodyMaterial.setAmbient(150 / 255, 75 / 255, 0, 1);
+        this.birdBodyMaterial.setDiffuse(150 / 255, 75 / 255, 0, 1);
+        this.birdBodyMaterial.setSpecular(150 / 255, 75 / 255, 0, 1);
         this.birdBodyMaterial.loadTexture("images/bird/body.png");
 
         this.birdHeadMaterial = this.defaultMaterial();
-        this.birdHeadMaterial.setAmbient(150/255, 75/255, 0, 1);
-        this.birdHeadMaterial.setDiffuse(150/255, 75/255, 0, 1);
-        this.birdHeadMaterial.setSpecular(150/255, 75/255, 0, 1);
+        this.birdHeadMaterial.setAmbient(150 / 255, 75 / 255, 0, 1);
+        this.birdHeadMaterial.setDiffuse(150 / 255, 75 / 255, 0, 1);
+        this.birdHeadMaterial.setSpecular(150 / 255, 75 / 255, 0, 1);
         this.birdHeadMaterial.loadTexture("images/bird/head.png");
 
         this.birdWingMaterial = this.defaultMaterial();
-        this.birdWingMaterial.setAmbient(150/255, 75/255, 0, 1);
-        this.birdWingMaterial.setDiffuse(150/255, 75/255, 0, 1);
-        this.birdWingMaterial.setSpecular(150/255, 75/255, 0, 1);
+        this.birdWingMaterial.setAmbient(150 / 255, 75 / 255, 0, 1);
+        this.birdWingMaterial.setDiffuse(150 / 255, 75 / 255, 0, 1);
+        this.birdWingMaterial.setSpecular(150 / 255, 75 / 255, 0, 1);
         this.birdWingMaterial.loadTexture("images/bird/wing.png");
 
         this.birdBeakMaterial = this.defaultMaterial();
@@ -126,7 +133,7 @@ export class MyScene extends CGFscene {
 
         this.birdEyeMaterial = this.defaultMaterial();
         this.birdEyeMaterial.loadTexture("images/bird/eye.png");
-        
+
         this.nestMaterial = this.defaultMaterial();
         this.nestMaterial.loadTexture("images/nest.jpg");
 
@@ -140,7 +147,10 @@ export class MyScene extends CGFscene {
         this.waterMaterial.loadTexture("images/water.jpg");
         this.waterMaterial.setTextureWrap("REPEAT", "REPEAT");
 
-        this.terrainHeightMap = new CGFtexture(this, "images/terrain/heightmap.jpg");
+        this.terrainHeightMap = new CGFtexture(
+            this,
+            "images/terrain/heightmap.jpg"
+        );
         this.terrainHeightMap.image.addEventListener(
             "load",
             this.onHeightMapLoad.bind(this)
@@ -159,37 +169,74 @@ export class MyScene extends CGFscene {
             this.terrainHeightMap,
             new CGFtexture(this, "images/terrain/altimetry.png")
         );
-        this.water = new MyWater(this, 256, .001, 20);
+        this.water = new MyWater(this, 256, 0.001, 20);
         this.panorama = new MyPanorama(this);
-        this.egg = new MyBirdEgg(this, 20, 20);
         this.nest = new MyNest(this, 5, 5, 0.9);
         this.bird = new MyBird(this);
         this.birdInitialYPos = this.bird.yPos;
 
-        if (this.heightMap)
+        if (this.heightMap) {
             this.initBillboards();
-        else
+            this.initEggs();
+            this.initNestPos();
+        } else {
             this.billboards = [];
+            this.eggs = [];
+            this.nestPosition = [0, 0, 0];
+        }
+    }
+
+    initNestPos() {
+        this.nestPosition = [0, -10000, 0];
+
+        while (this.nestPosition[1] < this.minPos) {
+            this.nestPosition[0] = (Math.random() - 0.5) * this.terrainSize;
+            this.nestPosition[2] = (Math.random() - 0.5) * this.terrainSize;
+            this.nestPosition[1] = this.getHeight(
+                this.nestPosition[0],
+                this.nestPosition[2]
+            );
+        }
+
+        this.bird.xPos = this.nestPosition[0];
+        this.bird.zPos = this.nestPosition[2];
+        this.bird.yPos = this.nestPosition[1] + 3;
+    }
+
+    initEggs() {
+        this.eggs = [];
+
+        for (let i = 0; i < this.numEggs; ) {
+            const x = (Math.random() - 0.5) * this.terrainSize;
+            const z = (Math.random() - 0.5) * this.terrainSize;
+            const y = this.getHeight(x, z);
+            const rotation = Math.random() * 2 * Math.PI;
+
+            if (y < this.minPos) continue;
+
+            this.eggs.push(new MyBirdEgg(this, 10, 10, [x, y, z], rotation));
+            i++;
+        }
     }
 
     initBillboards() {
         this.billboards = [];
-        for (let i = 0; i < this.numTrees;) {
+        for (let i = 0; i < this.numTrees; ) {
             const x = (Math.random() - 0.5) * this.terrainSize;
             const z = (Math.random() - 0.5) * this.terrainSize;
             const y = this.getHeight(x, z);
 
-            if (y < this.minTreePos || y > this.maxTreePos) continue;
+            if (y < this.minPos || y > this.maxPos) continue;
 
             this.billboards.push(new MyTree(this, x, y, z));
             i++;
         }
-        for (let i = 0; i < this.numGrass;) {
+        for (let i = 0; i < this.numGrass; ) {
             const x = (Math.random() - 0.5) * this.terrainSize;
             const z = (Math.random() - 0.5) * this.terrainSize;
             const y = this.getHeight(x, z);
 
-            if (y < this.minTreePos || y > this.maxTreePos) continue;
+            if (y < this.minPos || y > this.maxPos) continue;
 
             this.billboards.push(new MyGrass(this, x, y, z));
             i++;
@@ -331,8 +378,13 @@ export class MyScene extends CGFscene {
         this.panorama.display();
         this.water.display();
         this.bird.display();
-        this.egg.display();
+        this.eggs.forEach((egg) => egg.display());
+
+        this.pushMatrix();
+        this.translate(...this.nestPosition);
         this.nest.display();
+        this.popMatrix();
+
         this.billboards.forEach((billboard) => billboard.display());
 
         this.pushMatrix();
@@ -398,9 +450,8 @@ export class MyScene extends CGFscene {
             this.heightMap[(v2 * this.terrainHeightMap.image.width + u) * 4] /
             255;
         const d =
-            this.heightMap[
-                (v2 * this.terrainHeightMap.image.width + u2) * 4
-            ] / 255;
+            this.heightMap[(v2 * this.terrainHeightMap.image.width + u2) * 4] /
+            255;
 
         return (
             lerp2(a, b, c, d, t, s) *
