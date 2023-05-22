@@ -18,6 +18,8 @@
 
 ![Screenshot 4](screenshots/project-t06g04-4.png)
 
+![Screenshot 5](screenshots/project-t06g04-5.png)
+
 ### Textures
 
 - [Bird](https://freepbr.com/materials/feathers-pbr/)
