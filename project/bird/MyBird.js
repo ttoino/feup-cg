@@ -210,8 +210,6 @@ export class MyBird extends CGFobject {
     
         const heightDiff = this.animationStartingHeight - Math.max(this.scene.getHeight(this.xPos, this.zPos), this.scene.minPos);
 
-        console.log(heightDiff, this.yPos);
-
         this.startingYPos = this.animationStartingHeight + heightDiff * (((Math.cos(Math.PI * this.animationTime) + 1) / 2) - 1);
 
         if (this.startingYPos < Math.max(this.scene.getHeight(this.xPos, this.zPos), this.scene.minPos) + 3) {
