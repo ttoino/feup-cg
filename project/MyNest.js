@@ -58,13 +58,17 @@ export class MyNest extends CGFobject {
     }
 
     addEgg(egg) {
-        if (egg)
+        if (egg) {
             this.eggs.push(egg);
+            egg.position = egg.position.map((p, i) => p - this.position[i]);
+        }
     }
 
     update(delta) {
         this.eggs.forEach((egg, i) => {
             if (egg.position !== this.eggPositions[i]) {
+                console.log(egg.position);
+
                 const diff = this.eggPositions[i].map((p, i) => p - egg.position[i]);
                 const norm = Math.sqrt(diff.reduce((acc, p) => acc + p * p, 0));
 
