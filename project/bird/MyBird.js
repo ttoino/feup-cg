@@ -187,6 +187,7 @@ export class MyBird extends CGFobject {
         if (this.lastUpdate === -1) {
             this.lastUpdate = timeSinceAppStart;
         } else {
+            this.startingYPos = Math.max(this.startingYPos, this.scene.getHeight(this.xPos, this.zPos) + 3, this.scene.minPos);
 
             const delta = timeSinceAppStart - this.lastUpdate;
             this.lastUpdate = timeSinceAppStart;

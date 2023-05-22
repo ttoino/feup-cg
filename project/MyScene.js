@@ -201,9 +201,15 @@ export class MyScene extends CGFscene {
             );
         }
 
-        // this.bird.xPos = this.nestPosition[0];
-        // this.bird.zPos = this.nestPosition[2];
-        // this.bird.yPos = this.nestPosition[1] + 3;
+        this.nestPosition[1] += 1;
+
+        this.bird.startingXPos = this.nestPosition[0];
+        this.bird.startingZPos = this.nestPosition[2];
+        this.bird.startingYPos = this.nestPosition[1] + 3;
+
+        this.bird.xPos = this.bird.startingXPos;
+        this.bird.yPos = this.bird.startingYPos;
+        this.bird.zPos = this.bird.startingZPos;
     }
 
     initEggs() {
@@ -217,7 +223,7 @@ export class MyScene extends CGFscene {
 
             if (y < this.minPos) continue;
 
-            this.eggs.push(new MyBirdEgg(this, 10, 10, [x, y, z], rotation));
+            this.eggs.push(new MyBirdEgg(this, 10, 10, [x, y + .5, z], rotation));
             i++;
         }
     }
