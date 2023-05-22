@@ -205,14 +205,14 @@ export class MyBird extends CGFobject {
     }
 
     animatePickup(delta) {
-
-        if (this.animationStartingHeight == null || this.animationStartingHeight == undefined) this.animationStartingHeight = this.yPos;
+        if (this.animationStartingHeight == null || this.animationStartingHeight == undefined) {
+            this.animationStartingHeight = this.yPos;
+            this.heightDiff = this.yPos - Math.max(this.scene.getHeight(this.xPos, this.zPos), this.scene.minPos);
+        }
 
         if (this.animationTime == null || this.animationTime == undefined) this.animationTime = 0;
     
-        const heightDiff = this.animationStartingHeight - Math.max(this.scene.getHeight(this.xPos, this.zPos), this.scene.minPos);
-
-        this.startingYPos = this.animationStartingHeight + heightDiff * (((Math.cos(Math.PI * this.animationTime) + 1) / 2) - 1);
+        this.startingYPos = this.animationStartingHeight + this.heightDiff * (((Math.cos(Math.PI * this.animationTime) + 1) / 2) - 1);
 
         if (this.startingYPos < Math.max(this.scene.getHeight(this.xPos, this.zPos), this.scene.minPos) + 3) {
             // we are near the ground
@@ -230,10 +230,12 @@ export class MyBird extends CGFobject {
         if (this.animationTime >= 2) {
             delete this.animationTime;
             delete this.animationStartingHeight;
+            delete this.heightDiff;
 
             this.pickingEgg = false;
             return;
         }
+        
         this.animationTime += delta;
     }
 
