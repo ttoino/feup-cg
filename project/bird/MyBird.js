@@ -44,6 +44,9 @@ export class MyBird extends CGFobject {
         this.desiredBirdRoll = 0;
         this.turning = false;
 
+        this.birdPitch = 0;
+        this.changingHeight = false;
+
         this.birdSpeed = birdSpeed;
         this.lastUpdate = -1;
     }
@@ -99,6 +102,12 @@ export class MyBird extends CGFobject {
         }
     }
 
+    lift(amount) {
+        this.desiredBirdPitch = Math.PI / 5 * (amount < 0 ? 1 : -1) * Math.abs(Math.tanh(this.birdSpeed));
+        this.startingYPos += amount * Math.abs(Math.atan(this.birdSpeed / 10)) * 3;
+        this.changingHeight = true;
+    }
+
     turn(amount) {
         this.birdYaw += amount * 0.03 * Math.max(this.birdSpeed, 50);
         this.desiredBirdRoll = Math.PI / 4 * (amount < 0 ? 1 : -1);
@@ -115,6 +124,41 @@ export class MyBird extends CGFobject {
         this.turning = false;
     }
 
+    updateRoll() {
+        if (this.turning) {
+            const delta = this.desiredBirdRoll - this.birdRoll;
+            this.birdRoll += delta * 0.1;
+            if (Math.abs(delta) < 0.01) {
+                this.birdRoll = this.desiredBirdRoll;
+            }
+        } else {
+            const delta = 0 - this.birdRoll;
+            this.birdRoll += delta * 0.1;
+            if (Math.abs(this.birdRoll) < 0.01) {
+                this.birdRoll = 0;
+            }
+        }
+        this.turning = false;
+    }
+
+    updatePitch() {
+        if (this.changingHeight) {
+            console.log("Boas")
+            const delta = this.desiredBirdPitch - this.birdPitch;
+            this.birdPitch += delta * 0.1;
+            if (Math.abs(delta) < 0.01) {
+                this.birdPitch = this.desiredBirdPitch;
+            }
+        } else {
+            const delta = 0 - this.birdPitch;
+            this.birdPitch += delta * 0.1;
+            if (Math.abs(this.birdPitch) < 0.01) {
+                this.birdPitch = 0;
+            }
+        }
+        this.changingHeight = false;
+    }
+
     update(timeSinceAppStart) {
         if (this.lastUpdate === -1) {
             this.lastUpdate = timeSinceAppStart;
@@ -127,25 +171,13 @@ export class MyBird extends CGFobject {
 
             this.zPos += displacement * Math.cos(this.birdYaw);
             this.xPos += displacement * Math.sin(this.birdYaw);
-            this.yPos = this.startingYPos + 0.1 * Math.sin(timeSinceAppStart * Math.PI * 1.5);
+            this.yPos = this.startingYPos + (this.turning ? 0 : 1) * 0.1 * Math.sin(timeSinceAppStart * Math.PI * 1.5);
 
             this.lWing.turning = this.turning;
             this.rWing.turning = this.turning;
 
-            if (this.turning) {
-                const delta = this.desiredBirdRoll - this.birdRoll;
-                this.birdRoll += delta * 0.1;
-                if (Math.abs(delta) < 0.01) {
-                    this.birdRoll = this.desiredBirdRoll;
-                }
-            } else {
-                const delta = 0 - this.birdRoll;
-                this.birdRoll += delta * 0.1;
-                if (Math.abs(this.birdRoll) < 0.01) {
-                    this.birdRoll = 0;
-                }
-            }
-            this.turning = false;
+            this.updateRoll();
+            this.updatePitch();
 
             this.lWing.update(timeSinceAppStart);
             this.rWing.update(timeSinceAppStart);
@@ -157,6 +189,7 @@ export class MyBird extends CGFobject {
         this.scene.translate(this.xPos, this.yPos, this.zPos);
         this.scene.rotate(this.birdYaw, 0, 1, 0);
         this.scene.rotate(this.birdRoll, 0, 0, 1);
+        this.scene.rotate(this.birdPitch, 1, 0, 0);
 
         this.displayWings();
         this.displayBody();

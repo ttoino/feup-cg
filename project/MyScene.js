@@ -173,7 +173,6 @@ export class MyScene extends CGFscene {
         this.panorama = new MyPanorama(this);
         this.nest = new MyNest(this, 5, 5, 0.9);
         this.bird = new MyBird(this);
-        this.birdInitialYPos = this.bird.yPos;
 
         if (this.heightMap) {
             this.initBillboards();
@@ -244,6 +243,7 @@ export class MyScene extends CGFscene {
     }
 
     checkKeys() {
+
         if (this.gui.isKeyPressed("KeyW")) {
             this.bird.accelerate(0.5);
         } else if (this.gui.isKeyPressed("KeyS")) {
@@ -264,6 +264,12 @@ export class MyScene extends CGFscene {
             this.bird.turn(0.02);
         } else if (this.gui.isKeyPressed("KeyD")) {
             this.bird.turn(-0.02);
+        }
+
+        if (this.gui.isKeyPressed("Space")) {
+            this.bird.lift(0.1);
+        } else if (this.gui.isKeyPressed("ShiftLeft")){
+            this.bird.lift(-0.1);
         }
     }
 
@@ -295,7 +301,7 @@ export class MyScene extends CGFscene {
             ),
             vec3.fromValues(
                 this.bird.xPos,
-                this.birdInitialYPos,
+                this.bird.startingYPos,
                 this.bird.zPos
             )
         );
@@ -323,14 +329,14 @@ export class MyScene extends CGFscene {
 
             if (this.thirdPersonCamera) {
                 const cameraXPos = this.bird.xPos - Math.sin(this.bird.birdYaw) * 15;
-                const cameraYPos = this.birdInitialYPos + 10;
+                const cameraYPos = this.bird.startingYPos + 10;
                 const cameraZPos = this.bird.zPos - Math.cos(this.bird.birdYaw) * 15;
 
                 this.camera.setPosition([cameraXPos, cameraYPos, cameraZPos]);
                 // this.camera.moveForward(this.bird.birdSpeed * delta * 0.5);
                 this.camera.setTarget([
                     this.bird.xPos,
-                    this.birdInitialYPos,
+                    this.bird.startingYPos,
                     this.bird.zPos,
                 ]);
             }
