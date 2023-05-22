@@ -2,6 +2,7 @@ import { CGFobject } from "../../lib/CGF.js";
 import { MyBirdWing } from "./MyBirdWing.js";
 import { MyBirdBody } from "./MyBirdBody.js"
 import { MyBirdHead } from "./MyBirdHead.js"
+import { MyBirdLeg } from "./MyBirdLeg.js";
 
 /**
  * MySphere
@@ -15,7 +16,7 @@ export class MyBird extends CGFobject {
      *
      * @param {CGFscene} scene
      */
-    constructor(scene, startingX = 0, startingY = 0, startingZ = 0, birdSpeed = 0, startingYRotation = 0) {
+    constructor(scene, startingX = 0, startingY = 0, startingZ = 0, birdSpeed = 0, startingYRotation = 0, eggs = []) {
         super(scene);
 
         this.initBuffers();
@@ -23,6 +24,9 @@ export class MyBird extends CGFobject {
 
         this.lWing = new MyBirdWing(this.scene, birdColor);
         this.rWing = new MyBirdWing(this.scene, birdColor);
+
+        this.lLeg = new MyBirdLeg(this.scene);
+        this.rLeg = new MyBirdLeg(this.scene);
 
         this.body = new MyBirdBody(this.scene, birdColor);
 
@@ -49,6 +53,9 @@ export class MyBird extends CGFobject {
 
         this.birdSpeed = birdSpeed;
         this.lastUpdate = -1;
+
+        this.hasEgg = false;
+        this.eggs = eggs;
     }
 
     displayWings() {
@@ -67,6 +74,8 @@ export class MyBird extends CGFobject {
     enableNormalViz() {
         this.lWing.enableNormalViz();
         this.rWing.enableNormalViz();
+        this.lLeg.enableNormalViz();
+        this.rLeg.enableNormalViz();
         this.body.enableNormalViz();
         this.head.enableNormalViz();
     }
@@ -74,6 +83,8 @@ export class MyBird extends CGFobject {
     disableNormalViz() {
         this.lWing.disableNormalViz();
         this.rWing.disableNormalViz();
+        this.lLeg.disableNormalViz();
+        this.rLeg.disableNormalViz();
         this.body.disableNormalViz();
         this.head.disableNormalViz();
     }
@@ -94,6 +105,20 @@ export class MyBird extends CGFobject {
         this.scene.popMatrix();
     }
 
+    displayLegs() {
+        this.scene.pushMatrix();
+        this.scene.rotate(Math.PI/8, 0, 0, 1);
+        this.scene.translate(0, -1, 0);
+        this.lLeg.display();
+        this.scene.popMatrix();
+        
+        this.scene.pushMatrix();
+        this.scene.rotate(-Math.PI/8, 0, 0, 1);
+        this.scene.translate(0, -1, 0);
+        this.rLeg.display();
+        this.scene.popMatrix();
+    }
+
     accelerate(amount) {
         this.birdSpeed += amount;
 
@@ -101,7 +126,7 @@ export class MyBird extends CGFobject {
             this.birdSpeed = 0;
         }
     }
-
+    
     lift(amount) {
         this.desiredBirdPitch = Math.PI / 5 * (amount < 0 ? 1 : -1) * Math.abs(Math.tanh(this.birdSpeed));
         this.startingYPos += amount * Math.abs(Math.atan(this.birdSpeed / 10)) * 3;
@@ -143,7 +168,6 @@ export class MyBird extends CGFobject {
 
     updatePitch() {
         if (this.changingHeight) {
-            console.log("Boas")
             const delta = this.desiredBirdPitch - this.birdPitch;
             this.birdPitch += delta * 0.1;
             if (Math.abs(delta) < 0.01) {
@@ -194,6 +218,7 @@ export class MyBird extends CGFobject {
         this.displayWings();
         this.displayBody();
         this.displayHead();
+        this.displayLegs();
 
         this.scene.popMatrix();
     }

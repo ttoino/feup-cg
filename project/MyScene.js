@@ -131,6 +131,10 @@ export class MyScene extends CGFscene {
         this.birdBeakMaterial.setDiffuse(1, 0.8, 0, 1);
         this.birdBeakMaterial.loadTexture("images/bird/beak.png");
 
+        this.birdLegMaterial = this.defaultMaterial();
+        this.birdLegMaterial.setAmbient(1, 0.8, 0, 1);
+        this.birdLegMaterial.setDiffuse(1, 0.8, 0, 1);
+
         this.birdEyeMaterial = this.defaultMaterial();
         this.birdEyeMaterial.loadTexture("images/bird/eye.png");
 
@@ -197,9 +201,9 @@ export class MyScene extends CGFscene {
             );
         }
 
-        this.bird.xPos = this.nestPosition[0];
-        this.bird.zPos = this.nestPosition[2];
-        this.bird.yPos = this.nestPosition[1] + 3;
+        // this.bird.xPos = this.nestPosition[0];
+        // this.bird.zPos = this.nestPosition[2];
+        // this.bird.yPos = this.nestPosition[1] + 3;
     }
 
     initEggs() {
