@@ -159,7 +159,8 @@ export class MyBird extends CGFobject {
     }
 
     turn(amount) {
-        this.birdYaw += amount * 0.03 * Math.max(this.birdSpeed, 50) * this.speedFactor;
+        if (!this.pickingEgg)
+            this.birdYaw += amount * 0.03 * Math.max(this.birdSpeed, 50) * this.speedFactor;
         this.desiredBirdRoll = Math.PI / 4 * (amount < 0 ? 1 : -1);
         this.turning = true;
     }
@@ -208,6 +209,28 @@ export class MyBird extends CGFobject {
         this.changingHeight = false;
     }
 
+    animatePickup(delta) {
+
+        if (this.animationStartingHeight == null || this.animationStartingHeight == undefined) this.animationStartingHeight = this.yPos;
+
+        if (this.animationTime == null || this.animationTime == undefined) this.animationTime = 0;
+    
+        const heightDiff = this.animationStartingHeight - Math.max(this.scene.getHeight(this.xPos, this.zPos) + 3, this.scene.minPos);;
+
+        console.log(heightDiff, this.yPos);
+
+        this.startingYPos = this.animationStartingHeight + heightDiff * (((Math.cos(Math.PI * this.animationTime) + 1) / 2) - 1);
+
+        if (this.animationTime >= 2) {
+            delete this.animationTime;
+            delete this.animationStartingHeight;
+
+            this.pickingEgg = false;
+            return;
+        }
+        this.animationTime += delta;
+    }
+
     update(timeSinceAppStart) {
         if (this.lastUpdate === -1) {
             this.lastUpdate = timeSinceAppStart;
@@ -221,7 +244,7 @@ export class MyBird extends CGFobject {
 
             this.zPos += displacement * Math.cos(this.birdYaw);
             this.xPos += displacement * Math.sin(this.birdYaw);
-            this.yPos = this.startingYPos + (this.turning ? 0 : 1) * 0.1 * Math.sin(timeSinceAppStart * Math.PI * 1.5);
+            this.yPos = this.startingYPos + ((this.turning || this.pickingEgg) ? 0 : 1) * 0.1 * Math.sin(timeSinceAppStart * Math.PI * 1.5);
 
             if (this.egg)
                 this.egg.position = [this.xPos, this.yPos - 1.5, this.zPos];
@@ -229,8 +252,17 @@ export class MyBird extends CGFobject {
             this.lWing.turning = this.turning;
             this.rWing.turning = this.turning;
 
-            this.updateRoll();
-            this.updatePitch();
+            if (this.pickingEgg) {
+                // need to change yPos to reflect the animation
+                this.animatePickup(delta);
+            } else {
+                if (this.droppingEgg) {
+    
+                }
+                
+                this.updateRoll();
+                this.updatePitch();
+            }
 
             this.lWing.update(timeSinceAppStart);
             this.rWing.update(timeSinceAppStart);

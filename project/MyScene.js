@@ -282,7 +282,7 @@ export class MyScene extends CGFscene {
         if (this.gui.isKeyPressed("KeyP")) {
             this.bird.startPickup();
         } else if (this.gui.isKeyPressed("KeyO")) {
-            this.bird.dropEgg();
+            this.bird.startDrop();
         }
     }
 
