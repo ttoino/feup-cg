@@ -169,7 +169,7 @@ export class MyScene extends CGFscene {
             this.terrainHeightMap,
             new CGFtexture(this, "images/terrain/altimetry.png")
         );
-        this.water = new MyWater(this, 256, 0.001, 20);
+        this.water = new MyWater(this, 256, 0.001, 200);
         this.panorama = new MyPanorama(this);
         this.nest = new MyNest(this, 5, 5, 0.9);
         this.bird = new MyBird(this);

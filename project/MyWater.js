@@ -33,13 +33,13 @@ export class MyWater extends CGFobject {
     display() {
         this.scene.setActiveShader(this.shader);
         this.shader.setUniformsValues({
-            uTime: (this.scene.lastUpdateTime - this.scene.appStartTime)/10000.0,
+            uTime: (this.scene.lastUpdateTime - this.scene.appStartTime)/20000.0,
         });
 
         this.scene.pushMatrix();
         this.scene.waterMaterial.apply();
-        this.scene.translate(this.scene.camera.position[0], this.scene.waterPos, this.scene.camera.position[2]);
-        this.scene.scale(this.scene.terrainSize * 2, this.scene.terrainSize * 2, this.scene.terrainSize * 2);
+        this.scene.translate(0, this.scene.waterPos, 0);
+        this.scene.scale(this.scene.terrainSize * 20, this.scene.terrainSize * 2, this.scene.terrainSize * 20);
         this.scene.rotate(-Math.PI / 2.0, 1, 0, 0);
         this.plane.display();
         this.scene.popMatrix();
