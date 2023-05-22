@@ -131,6 +131,9 @@ export class MyBird extends CGFobject {
         const distToNest = dist([this.xPos, this.yPos, this.zPos], this.scene.nest.position);
 
         if (distToNest < 10 && this.egg) {
+
+            this.egg.position = [this.xPos, this.yPos - this.scaleFactor, this.zPos];
+
             this.scene.nest.addEgg(this.egg);
             this.egg = undefined;
         }
@@ -250,7 +253,7 @@ export class MyBird extends CGFobject {
             this.yPos = this.startingYPos + ((this.turning || this.pickingEgg) ? 0 : 1) * 0.1 * Math.sin(timeSinceAppStart * Math.PI * 1.5);
 
             if (this.egg)
-                this.egg.position = [this.xPos, this.yPos - 1.5, this.zPos];
+                this.egg.position = [0, 0, 0];
 
             this.lWing.turning = this.turning;
             this.rWing.turning = this.turning;
@@ -275,14 +278,21 @@ export class MyBird extends CGFobject {
     display() {
         this.scene.pushMatrix();
 
-        if (this.egg)
-            this.egg.display();
-
         this.scene.translate(this.xPos, this.yPos, this.zPos);
         this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
         this.scene.rotate(this.birdYaw, 0, 1, 0);
         this.scene.rotate(this.birdRoll, 0, 0, 1);
         this.scene.rotate(this.birdPitch, 1, 0, 0);
+
+        if (this.egg) {
+
+            this.scene.pushMatrix();
+
+            this.scene.translate(0, -this.scaleFactor, 0)
+
+            this.egg.display();
+            this.scene.popMatrix();
+        }
 
         this.displayWings();
         this.displayBody();
