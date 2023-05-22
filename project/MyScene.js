@@ -206,7 +206,7 @@ export class MyScene extends CGFscene {
     initEggs() {
         this.eggs = [];
 
-        for (let i = 0; i < this.numEggs; ) {
+        for (let i = 0; i < this.numEggs;) {
             const x = (Math.random() - 0.5) * this.terrainSize;
             const z = (Math.random() - 0.5) * this.terrainSize;
             const y = this.getHeight(x, z);
@@ -221,7 +221,7 @@ export class MyScene extends CGFscene {
 
     initBillboards() {
         this.billboards = [];
-        for (let i = 0; i < this.numTrees; ) {
+        for (let i = 0; i < this.numTrees;) {
             const x = (Math.random() - 0.5) * this.terrainSize;
             const z = (Math.random() - 0.5) * this.terrainSize;
             const y = this.getHeight(x, z);
@@ -231,7 +231,7 @@ export class MyScene extends CGFscene {
             this.billboards.push(new MyTree(this, x, y, z));
             i++;
         }
-        for (let i = 0; i < this.numGrass; ) {
+        for (let i = 0; i < this.numGrass;) {
             const x = (Math.random() - 0.5) * this.terrainSize;
             const z = (Math.random() - 0.5) * this.terrainSize;
             const y = this.getHeight(x, z);
@@ -321,15 +321,11 @@ export class MyScene extends CGFscene {
 
             this.bird.update(timeSinceAppStart);
 
-            console.log(this.thirdPersonCamera);
-
-            const cameraXPos =
-                this.bird.xPos - Math.sin(this.bird.birdYaw) * 15;
-            const cameraYPos = this.birdInitialYPos + 10;
-            const cameraZPos =
-                this.bird.zPos - Math.cos(this.bird.birdYaw) * 15;
-
             if (this.thirdPersonCamera) {
+                const cameraXPos = this.bird.xPos - Math.sin(this.bird.birdYaw) * 15;
+                const cameraYPos = this.birdInitialYPos + 10;
+                const cameraZPos = this.bird.zPos - Math.cos(this.bird.birdYaw) * 15;
+
                 this.camera.setPosition([cameraXPos, cameraYPos, cameraZPos]);
                 // this.camera.moveForward(this.bird.birdSpeed * delta * 0.5);
                 this.camera.setTarget([
@@ -339,16 +335,6 @@ export class MyScene extends CGFscene {
                 ]);
             }
         }
-
-        const timeSinceAppStart = (time - this.appStartTime) / 1000.0;
-
-        this.bird.update(timeSinceAppStart);
-        // this.camera.setPosition([this.bird.xPos, this.bird.yPos + 10, this.bird.zPos - 15]);
-        this.camera.setTarget([
-            this.bird.xPos,
-            this.birdInitialYPos,
-            this.bird.zPos,
-        ]);
 
         super.update();
     }
@@ -455,8 +441,8 @@ export class MyScene extends CGFscene {
 
         return (
             lerp2(a, b, c, d, t, s) *
-                this.terrainScaleFactor *
-                this.terrainSize +
+            this.terrainScaleFactor *
+            this.terrainSize +
             this.terrainPos
         );
     }

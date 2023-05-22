@@ -100,7 +100,7 @@ export class MyBird extends CGFobject {
     }
 
     turn(amount) {
-        this.birdYaw += amount * 0.03 * this.birdSpeed;
+        this.birdYaw += amount * 0.03 * Math.max(this.birdSpeed, 50);
         this.desiredBirdRoll = Math.PI / 4 * (amount < 0 ? 1 : -1);
         this.turning = true;
     }
@@ -112,6 +112,7 @@ export class MyBird extends CGFobject {
         this.zPos = this.startingZPos;
         this.birdYaw = this.startingYRotation;
         this.desiredBirdRoll = 0;
+        this.turning = false;
     }
 
     update(timeSinceAppStart) {
@@ -128,20 +129,16 @@ export class MyBird extends CGFobject {
             this.xPos += displacement * Math.sin(this.birdYaw);
             this.yPos = this.startingYPos + 0.1 * Math.sin(timeSinceAppStart * Math.PI * 1.5);
 
-            if (this.turning) {
-                this.lWing.turning = true;
-                this.rWing.turning = true;
+            this.lWing.turning = this.turning;
+            this.rWing.turning = this.turning;
 
+            if (this.turning) {
                 const delta = this.desiredBirdRoll - this.birdRoll;
                 this.birdRoll += delta * 0.1;
                 if (Math.abs(delta) < 0.01) {
                     this.birdRoll = this.desiredBirdRoll;
                 }
-
             } else {
-                this.lWing.turning = false;
-                this.rWing.turning = false;
-
                 const delta = 0 - this.birdRoll;
                 this.birdRoll += delta * 0.1;
                 if (Math.abs(this.birdRoll) < 0.01) {

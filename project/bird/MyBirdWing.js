@@ -125,9 +125,9 @@ export class MyBirdWing extends CGFobject {
     }
 
     update(t) {
-        if (t % 4 < 1) {
-            this.innerWingRotation = this.turning ? 0 : -Math.PI / 10 + Math.sin(-t * Math.PI * 3) * 1.8 * Math.PI / 7;
-            this.outterWingRotation = this.turning ? 0 : -Math.PI / 34 + Math.sin(-t * Math.PI * 3) * 1.2 * Math.PI / 17;
+        if (t % 4 < 1 && !this.turning) {
+            this.innerWingRotation = -Math.PI / 10 + Math.sin(-t * Math.PI * 3) * 1.8 * Math.PI / 7;
+            this.outterWingRotation = -Math.PI / 34 + Math.sin(-t * Math.PI * 3) * 1.2 * Math.PI / 17;
         }
     }
 
