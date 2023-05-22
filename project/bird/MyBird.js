@@ -21,7 +21,6 @@ export class MyBird extends CGFobject {
         super(scene);
 
         this.initBuffers();
-        const birdColor = [150 / 255, 75 / 255, 0 / 255]
 
         this.lWing = new MyBirdWing(this.scene);
         this.rWing = new MyBirdWing(this.scene, true);

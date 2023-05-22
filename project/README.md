@@ -4,6 +4,8 @@
 
 ## Project Notes
 
+`MyTreeGroupPatch` and `MyTreeRowPatch` have not been implemented, as the trees are placed randomly.
+
 ### Screenshots
 
 ![Screenshot 1-1](screenshots/cg-t06g04-project-1-1.png)
