@@ -17,21 +17,21 @@ export class MyBird extends CGFobject {
      *
      * @param {CGFscene} scene
      */
-    constructor(scene, startingX = 0, startingY = 0, startingZ = 0, birdSpeed = 0, startingYRotation = 0, eggs = []) {
+    constructor(scene, startingX = 0, startingY = 0, startingZ = 0, birdSpeed = 0, startingYRotation = 0) {
         super(scene);
 
         this.initBuffers();
         const birdColor = [150 / 255, 75 / 255, 0 / 255]
 
-        this.lWing = new MyBirdWing(this.scene, birdColor);
-        this.rWing = new MyBirdWing(this.scene, birdColor);
+        this.lWing = new MyBirdWing(this.scene);
+        this.rWing = new MyBirdWing(this.scene, true);
 
         this.lLeg = new MyBirdLeg(this.scene);
         this.rLeg = new MyBirdLeg(this.scene);
 
-        this.body = new MyBirdBody(this.scene, birdColor);
+        this.body = new MyBirdBody(this.scene);
 
-        this.head = new MyBirdHead(this.scene, birdColor);
+        this.head = new MyBirdHead(this.scene);
 
         this.xPos = startingX;
         this.yPos = startingY;

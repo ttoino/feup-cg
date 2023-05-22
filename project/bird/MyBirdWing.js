@@ -12,7 +12,7 @@ export class MyBirdWing extends CGFobject {
      *
      * @param {CGFscene} scene
      */
-    constructor(scene, wingColor) {
+    constructor(scene, inverted = false) {
         super(scene);
 
         this.outterWing = new CGFobject(this.scene);
@@ -22,6 +22,7 @@ export class MyBirdWing extends CGFobject {
         this.outterWingRotation = Math.PI / 17;
 
         this.turning = false;
+        this.inverted = inverted;
 
         this.initBuffers();
     }
@@ -58,6 +59,9 @@ export class MyBirdWing extends CGFobject {
             0, -1, 0,
             0, -1, 0,
         ];
+
+        if (this.inverted)
+            this.innerWing.normals = this.innerWing.normals.map((n) => -n);
 
         this.innerWing.texCoords = [
             0, 0.1,
@@ -99,6 +103,9 @@ export class MyBirdWing extends CGFobject {
             0, -1, 0,
             0, -1, 0,
         ];
+
+        if (this.inverted)
+            this.outterWing.normals = this.outterWing.normals.map((n) => -n);
 
         this.outterWing.texCoords = [
             0, 0,
