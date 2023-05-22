@@ -3,6 +3,7 @@ import { MyBirdWing } from "./MyBirdWing.js";
 import { MyBirdBody } from "./MyBirdBody.js"
 import { MyBirdHead } from "./MyBirdHead.js"
 import { MyBirdLeg } from "./MyBirdLeg.js";
+import { dist } from "../MyMath.js";
 
 /**
  * MySphere
@@ -20,7 +21,7 @@ export class MyBird extends CGFobject {
         super(scene);
 
         this.initBuffers();
-        const birdColor = [150/255, 75/255, 0/255]
+        const birdColor = [150 / 255, 75 / 255, 0 / 255]
 
         this.lWing = new MyBirdWing(this.scene, birdColor);
         this.rWing = new MyBirdWing(this.scene, birdColor);
@@ -39,6 +40,9 @@ export class MyBird extends CGFobject {
         this.startingXPos = startingX;
         this.startingYPos = startingY;
         this.startingZPos = startingZ;
+
+        this.scaleFactor = 1;
+        this.speedFactor = 1;
 
         this.birdYaw = startingYRotation;
 
@@ -107,16 +111,31 @@ export class MyBird extends CGFobject {
 
     displayLegs() {
         this.scene.pushMatrix();
-        this.scene.rotate(Math.PI/8, 0, 0, 1);
+        this.scene.rotate(Math.PI / 8, 0, 0, 1);
         this.scene.translate(0, -1, 0);
         this.lLeg.display();
         this.scene.popMatrix();
-        
+
         this.scene.pushMatrix();
-        this.scene.rotate(-Math.PI/8, 0, 0, 1);
+        this.scene.rotate(-Math.PI / 8, 0, 0, 1);
         this.scene.translate(0, -1, 0);
         this.rLeg.display();
         this.scene.popMatrix();
+    }
+
+    tryToPickUp() {
+
+        this.eggs.forEach((egg, i) => {
+
+            const distToEgg = dist([this.xPos, this.yPos, this.zPos], egg.position);
+
+            if (distToEgg < 6) {
+
+
+
+                return;
+            }
+        });
     }
 
     accelerate(amount) {
@@ -126,7 +145,7 @@ export class MyBird extends CGFobject {
             this.birdSpeed = 0;
         }
     }
-    
+
     lift(amount) {
         this.desiredBirdPitch = Math.PI / 5 * (amount < 0 ? 1 : -1) * Math.abs(Math.tanh(this.birdSpeed));
         this.startingYPos += amount * Math.abs(Math.atan(this.birdSpeed / 10)) * 3;
@@ -134,7 +153,7 @@ export class MyBird extends CGFobject {
     }
 
     turn(amount) {
-        this.birdYaw += amount * 0.03 * Math.max(this.birdSpeed, 50);
+        this.birdYaw += amount * 0.03 * Math.max(this.birdSpeed, 50) * this.speedFactor;
         this.desiredBirdRoll = Math.PI / 4 * (amount < 0 ? 1 : -1);
         this.turning = true;
     }
@@ -192,7 +211,7 @@ export class MyBird extends CGFobject {
             const delta = timeSinceAppStart - this.lastUpdate;
             this.lastUpdate = timeSinceAppStart;
 
-            const displacement = this.birdSpeed * delta * 0.5
+            const displacement = this.birdSpeed * delta * 0.5  * this.speedFactor;
 
             this.zPos += displacement * Math.cos(this.birdYaw);
             this.xPos += displacement * Math.sin(this.birdYaw);
@@ -211,6 +230,7 @@ export class MyBird extends CGFobject {
 
     display() {
         this.scene.pushMatrix();
+        this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
         this.scene.translate(this.xPos, this.yPos, this.zPos);
         this.scene.rotate(this.birdYaw, 0, 1, 0);
         this.scene.rotate(this.birdRoll, 0, 0, 1);

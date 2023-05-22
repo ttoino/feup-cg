@@ -380,7 +380,7 @@ export class MyScene extends CGFscene {
         this.panorama.display();
         this.water.display();
         this.bird.display();
-        this.eggs.forEach((egg) => egg.display());
+        this.eggs.filter((egg) => !egg.pickedUp).forEach((egg) => egg.display());
 
         this.pushMatrix();
         this.translate(...this.nestPosition);

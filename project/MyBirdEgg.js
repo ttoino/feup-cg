@@ -21,6 +21,8 @@ export class MyBirdEgg extends CGFobject {
         this.egg = new MyEgg(this.scene, slices, stacks);
         this.position = position;
         this.rotation = rotation;
+
+        this.pickedUp = false;
     }
 
     display() {
