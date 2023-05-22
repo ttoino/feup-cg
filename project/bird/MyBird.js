@@ -126,13 +126,6 @@ export class MyBird extends CGFobject {
 
     startPickup() {
         this.pickingEgg = true;
-
-        const i = this.scene.eggs.findIndex((egg) => dist(egg.position, [this.xPos, this.yPos, this.zPos]) < 5);
-        
-        if (i !== -1) {
-            this.egg = this.scene.eggs[i];
-            this.scene.eggs.splice(i, 1);
-        }
     }
 
     dropEgg() {
@@ -215,11 +208,24 @@ export class MyBird extends CGFobject {
 
         if (this.animationTime == null || this.animationTime == undefined) this.animationTime = 0;
     
-        const heightDiff = this.animationStartingHeight - Math.max(this.scene.getHeight(this.xPos, this.zPos) + 3, this.scene.minPos);;
+        const heightDiff = this.animationStartingHeight - Math.max(this.scene.getHeight(this.xPos, this.zPos), this.scene.minPos);
 
         console.log(heightDiff, this.yPos);
 
         this.startingYPos = this.animationStartingHeight + heightDiff * (((Math.cos(Math.PI * this.animationTime) + 1) / 2) - 1);
+
+        if (this.startingYPos < Math.max(this.scene.getHeight(this.xPos, this.zPos), this.scene.minPos) + 3) {
+            // we are near the ground
+
+            if (!this.egg) {
+                const i = this.scene.eggs.findIndex((egg) => dist(egg.position, [this.xPos, this.yPos, this.zPos]) < 5);
+        
+                if (i !== -1) {
+                    this.egg = this.scene.eggs[i];
+                    this.scene.eggs.splice(i, 1);
+                }
+            }
+        }
 
         if (this.animationTime >= 2) {
             delete this.animationTime;
