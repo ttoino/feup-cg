@@ -60,6 +60,9 @@ export class MyBird extends CGFobject {
 
         this.hasEgg = false;
         this.eggs = eggs;
+
+        this.pickingEgg = false;
+        this.droppingEgg = false;
     }
 
     displayWings() {
@@ -123,19 +126,16 @@ export class MyBird extends CGFobject {
         this.scene.popMatrix();
     }
 
-    tryToPickUp() {
+    startPickup() {
+        this.pickingEgg = true;
+    }
 
-        this.eggs.forEach((egg, i) => {
+    dropEgg() {
+        const distToNest = dist([this.xPos, this.yPos, this.zPos], this.scene.nestPosition);
 
-            const distToEgg = dist([this.xPos, this.yPos, this.zPos], egg.position);
-
-            if (distToEgg < 6) {
-
-
-
-                return;
-            }
-        });
+        if (distToNest < 10) {
+            this.droppingEgg = true;
+        }
     }
 
     accelerate(amount) {
@@ -230,8 +230,8 @@ export class MyBird extends CGFobject {
 
     display() {
         this.scene.pushMatrix();
-        this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
         this.scene.translate(this.xPos, this.yPos, this.zPos);
+        this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
         this.scene.rotate(this.birdYaw, 0, 1, 0);
         this.scene.rotate(this.birdRoll, 0, 0, 1);
         this.scene.rotate(this.birdPitch, 1, 0, 0);

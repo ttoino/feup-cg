@@ -281,6 +281,12 @@ export class MyScene extends CGFscene {
         } else if (this.gui.isKeyPressed("ShiftLeft")){
             this.bird.lift(-0.1);
         }
+
+        if (this.gui.isKeyPressed("KeyP")) {
+            this.bird.startPickup();
+        } else if (this.gui.isKeyPressed("KeyO")) {
+            this.bird.dropEgg();
+        }
     }
 
     initLights() {
