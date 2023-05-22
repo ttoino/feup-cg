@@ -1,4 +1,6 @@
-import { CGFappearance, CGFobject } from "../lib/CGF.js";
+import { CGFobject } from "../lib/CGF.js";
+import { MyBirdEgg } from "./MyBirdEgg.js";
+import { MyBasket } from "./primitives/MyBasket.js";
 
 /**
  * MyNest
@@ -11,108 +13,77 @@ export class MyNest extends CGFobject {
     /**
      *
      * @param {CGFscene} scene
-     * @param {number} slices
-     * @param {number} stacks
-     * @param {number} innerRadius
      */
-    constructor(scene, slices, stacks, innerRadius) {
+    constructor(scene) {
         super(scene);
-        this.slices = slices;
-        this.stacks = stacks;
-        this.innerRadius = innerRadius;
-        this.initBuffers();
+        this.basket = new MyBasket(this.scene, 20, 20, 0.9);
+        this.position = [0, 0, 0];
+        this.eggs = [];
+
+        this.initEggPositions();
     }
 
-    initBuffers() {
-        this.vertices = [];
-        this.indices = [];
-        this.normals = [];
-        this.texCoords = [];
+    initEggPositions() {
+        this.eggPositions = [];
 
-        const verticesPerSlice = (this.stacks + 1) * 2 + 3;
+        let dtheta = Math.PI / 6;
+        let phi = -Math.PI / 6;
+        let cp = Math.cos(phi);
+        let sp = Math.sin(phi);
 
-        const dtheta = (Math.PI * 0.5) / this.slices;
-        const dphi = (Math.PI * 0.5) / this.stacks;
-
-        for (let slice = 0; slice <= this.slices * 4; ++slice) {
-            const theta = slice * dtheta;
+        for (let i = 0; i < 12; ++i) {
+            const theta = i * dtheta;
             const ct = Math.cos(theta);
             const st = Math.sin(theta);
 
-            for (let stack = 0; stack <= this.stacks; ++stack) {
-                const phi = -Math.PI * 0.5 - stack * dphi;
-                const cp = Math.cos(phi);
-                const sp = Math.sin(phi);
-
-                this.vertices.push(ct * cp, sp, st * cp);
-                this.vertices.push(this.innerRadius * ct * cp, this.innerRadius * sp, this.innerRadius * st * cp);
-                this.normals.push(ct * cp, sp, st * cp);
-                this.normals.push(-ct * cp, -sp, -st * cp);
-                this.texCoords.push(
-                    1 - slice / (this.slices * 4),
-                    1 - stack / (this.stacks * 2),
-                    1 - slice / (this.slices * 4),
-                    1 - stack / (this.stacks * 2),
-                );
-
-                if (slice > 0 && stack > 0) {
-                    this.indices.push(
-                        slice * verticesPerSlice + stack * 2,
-                        (slice - 1) * verticesPerSlice + stack * 2 - 2,
-                        (slice - 1) * verticesPerSlice + stack * 2,
-                        slice * verticesPerSlice + stack * 2,
-                        slice * verticesPerSlice + stack * 2 - 2,
-                        (slice - 1) * verticesPerSlice + stack * 2 - 2,
-                    );
-                    this.indices.push(
-                        slice * verticesPerSlice + stack * 2 + 1,
-                        (slice - 1) * verticesPerSlice + stack * 2 + 1,
-                        (slice - 1) * verticesPerSlice + stack * 2 - 1,
-                        slice * verticesPerSlice + stack * 2 + 1,
-                        (slice - 1) * verticesPerSlice + stack * 2 - 1,
-                        slice * verticesPerSlice + stack * 2 - 1,
-                    );
-                }
-            }
-
-            this.vertices.push(ct, 0, st);
-            this.vertices.push((this.innerRadius + 1) / 2 * ct, 0, (this.innerRadius + 1) / 2 * st);
-            this.vertices.push(this.innerRadius * ct, 0, this.innerRadius * st);
-
-            this.normals.push(0, 1, 0);
-            this.normals.push(0, 1, 0);
-            this.normals.push(0, 1, 0);
-
-            this.texCoords.push(1 - slice / (this.slices * 4), 0.5);
-            this.texCoords.push(1 - slice / (this.slices * 4), 0.6);
-            this.texCoords.push(1 - slice / (this.slices * 4), 0.5);
-
-            if (slice > 0) {
-                this.indices.push(
-                    slice * verticesPerSlice - 2,
-                    (slice + 1) * verticesPerSlice - 2,
-                    (slice + 1) * verticesPerSlice - 3,
-                    slice * verticesPerSlice - 2,
-                    (slice + 1) * verticesPerSlice - 3,
-                    slice * verticesPerSlice - 3
-                );
-                this.indices.push(
-                    slice * verticesPerSlice - 1,
-                    (slice + 1) * verticesPerSlice - 1,
-                    (slice + 1) * verticesPerSlice - 2,
-                    slice * verticesPerSlice - 1,
-                    (slice + 1) * verticesPerSlice - 2,
-                    slice * verticesPerSlice - 2
-                );
-            }
+            this.eggPositions.push([ct * cp * 2.6, sp * 2.6 + 3, st * cp * 2.6]);
         }
 
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
+        dtheta = Math.PI / 3;
+        phi = -2 * Math.PI / 6;
+        cp = Math.cos(phi);
+        sp = Math.sin(phi);
+
+        for (let i = 0; i < 6; ++i) {
+            const theta = i * dtheta;
+            const ct = Math.cos(theta);
+            const st = Math.sin(theta);
+
+            this.eggPositions.push([ct * cp * 2.6, sp * 2.6 + 3, st * cp * 2.6]);
+        }
+
+        this.eggPositions.push([0, 0.4, 0]);
+
+        this.eggPositions.shuffle();
+    }
+
+    addEgg(egg) {
+        if (egg)
+            this.eggs.push(egg);
+    }
+
+    update(delta) {
+        this.eggs.forEach((egg, i) => {
+            if (egg.position !== this.eggPositions[i]) {
+                const diff = this.eggPositions[i].map((p, i) => p - egg.position[i]);
+                const norm = Math.sqrt(diff.reduce((acc, p) => acc + p * p, 0));
+
+                if (norm < 0.1)
+                    egg.position = this.eggPositions[i];
+
+                egg.position = egg.position.map((p, i) => p + diff[i] * delta);
+            }
+        });
     }
 
     display() {
+        this.scene.pushMatrix();
+        this.scene.translate(...this.position)
+        this.eggs.forEach((egg) => egg.display());
+        this.scene.scale(3, 3, 3);
+        this.scene.translate(0, 1, 0);
         this.scene.nestMaterial.apply();
-        super.display();
+        this.basket.display();
+        this.scene.popMatrix();
     }
 }

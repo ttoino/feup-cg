@@ -175,37 +175,34 @@ export class MyScene extends CGFscene {
         );
         this.water = new MyWater(this, 256, 0.001, 200);
         this.panorama = new MyPanorama(this);
-        this.nest = new MyNest(this, 5, 5, 0.9);
+        this.nest = new MyNest(this);
         this.bird = new MyBird(this);
 
         if (this.heightMap) {
             this.initBillboards();
             this.initEggs();
-            this.initNestPos();
+            this.initNest();
         } else {
             this.billboards = [];
             this.eggs = [];
-            this.nestPosition = [0, 0, 0];
         }
     }
 
-    initNestPos() {
-        this.nestPosition = [0, -10000, 0];
+    initNest() {
+        this.nest.position = [0, -10000, 0];
 
-        while (this.nestPosition[1] < this.minPos) {
-            this.nestPosition[0] = (Math.random() - 0.5) * this.terrainSize;
-            this.nestPosition[2] = (Math.random() - 0.5) * this.terrainSize;
-            this.nestPosition[1] = this.getHeight(
-                this.nestPosition[0],
-                this.nestPosition[2]
+        while (this.nest.position[1] < this.minPos) {
+            this.nest.position[0] = (Math.random() - 0.5) * this.terrainSize;
+            this.nest.position[2] = (Math.random() - 0.5) * this.terrainSize;
+            this.nest.position[1] = this.getHeight(
+                this.nest.position[0],
+                this.nest.position[2]
             );
         }
 
-        this.nestPosition[1] += 1;
-
-        this.bird.startingXPos = this.nestPosition[0];
-        this.bird.startingZPos = this.nestPosition[2];
-        this.bird.startingYPos = this.nestPosition[1] + 3;
+        this.bird.startingXPos = this.nest.position[0];
+        this.bird.startingZPos = this.nest.position[2];
+        this.bird.startingYPos = this.nest.position[1] + 3;
 
         this.bird.xPos = this.bird.startingXPos;
         this.bird.yPos = this.bird.startingYPos;
@@ -223,7 +220,7 @@ export class MyScene extends CGFscene {
 
             if (y < this.minPos) continue;
 
-            this.eggs.push(new MyBirdEgg(this, 10, 10, [x, y + .5, z], rotation));
+            this.eggs.push(new MyBirdEgg(this, 10, 10, [x, y, z], rotation));
             i++;
         }
     }
@@ -342,6 +339,7 @@ export class MyScene extends CGFscene {
             const timeSinceAppStart = (time - this.appStartTime) / 1000.0;
 
             this.bird.update(timeSinceAppStart);
+            this.nest.update(delta);
 
             if (this.thirdPersonCamera) {
                 const cameraXPos = this.bird.xPos - Math.sin(this.bird.birdYaw) * 15;
@@ -387,11 +385,7 @@ export class MyScene extends CGFscene {
         this.water.display();
         this.bird.display();
         this.eggs.filter((egg) => !egg.pickedUp).forEach((egg) => egg.display());
-
-        this.pushMatrix();
-        this.translate(...this.nestPosition);
         this.nest.display();
-        this.popMatrix();
 
         this.billboards.forEach((billboard) => billboard.display());
 

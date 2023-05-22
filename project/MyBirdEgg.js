@@ -28,7 +28,8 @@ export class MyBirdEgg extends CGFobject {
     display() {
         this.scene.pushMatrix();
         this.scene.eggMaterial.apply();
-        this.scene.translate(this.position[0], this.position[1] + .5, this.position[2]);
+        this.scene.translate(...this.position);
+        this.scene.scale(0.5, 0.5, 0.5);
         this.scene.rotate(Math.PI * .5, 1, 0, 0);
         this.scene.rotate(this.rotation, 0, 0, 1);
         this.egg.display();
